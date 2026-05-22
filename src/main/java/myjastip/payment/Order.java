@@ -1,4 +1,4 @@
-package jastip.payment;
+package myjastip.payment;
 
 public class Order {
 	private String orderId;

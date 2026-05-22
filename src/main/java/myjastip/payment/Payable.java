@@ -1,4 +1,4 @@
-package jastip.payment;
+package myjastip.payment;
 
 public interface Payable {
 

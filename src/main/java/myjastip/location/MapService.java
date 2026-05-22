@@ -1,4 +1,4 @@
-package jastip.location;
+package myjastip.location;
 
 public class MapService {
 

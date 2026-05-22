@@ -1,4 +1,4 @@
-package jastip.chat;
+package myjastip.chat;
 
 public class ChatRoom {
 

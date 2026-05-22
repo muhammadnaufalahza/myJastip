@@ -1,4 +1,4 @@
-package jastip.users;
+package myjastip.users;
 
 public class Jastiper {
 

@@ -1,4 +1,4 @@
-package jastip.storage;
+package myjastip.storage;
 
 public class CartItem {
 	private int quantity;

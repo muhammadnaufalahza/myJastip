@@ -1,4 +1,4 @@
-package jastip.users;
+package myjastip.users;
 
 import java.util.ArrayList;
 

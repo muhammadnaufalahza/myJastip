@@ -1,4 +1,4 @@
-package jastip.users;
+package myjastip.users;
 
 public abstract class User {
 	private String userId;
