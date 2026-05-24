@@ -22,7 +22,7 @@ public class MyJastip extends Application {
 	}
 	
 	private Parent createContent() {
-        return new StackPane(new Text("--- Sistem Jastip ---"));
+        return new StackPane(new Text("-- Sistem Jastip --"));
     }
 	
 	public static void main(String[] args) {	
