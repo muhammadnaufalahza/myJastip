@@ -9,7 +9,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class MyJastip extends Application {
-
 	@Override
 	public void start(Stage stage) {
 		try {
@@ -27,13 +26,18 @@ public class MyJastip extends Application {
     }
 	
 	public static void main(String[] args) {	
-		System.out.println("Hello World");
+		System.out.println("Hello World!!!");
+
+                
 //		DatabaseUtil.testDB();
 //		Test PostgreSQL Database
 		
-//		Application.launch(MyJastip.class, args);
-//		Uncomment jika sudah setup JAvaFX
-		
-	}
+		Application.launch(MyJastip.class, args);
+                
+
+//              VM Arguments:
+//		--module-path "D:\Libs\openjfx-26.0.1_windows-x64_bin-sdk\javafx-sdk-26.0.1\lib" --add-modules javafx.controls,javafx.fxml --enable-native-access=javafx.graphics
+
+        }
 
 }
