@@ -1,5 +1,6 @@
 package myjastip;
 
+/*
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -29,14 +30,24 @@ public class MyJastip extends Application {
 		System.out.println("test test test");
 
                 
-//		DatabaseUtil.testDB();
-//		Test PostgreSQL Database
+		DatabaseUtil.testDB();
+		Test PostgreSQL Database
 		
 		Application.launch(MyJastip.class, args);
                 
 
-//              VM Arguments:
-//		--module-path "D:\Libs\openjfx-26.0.1_windows-x64_bin-sdk\javafx-sdk-26.0.1\lib" --add-modules javafx.controls,javafx.fxml --enable-native-access=javafx.graphics
+      	VM Arguments:
+		--module-path "D:\Libs\openjfx-26.0.1_windows-x64_bin-sdk\javafx-sdk-26.0.1\lib" --add-modules javafx.controls,javafx.fxml --enable-native-access=javafx.graphics
+
+        }
+
+}
+*/
+
+public class MyJastip {
+		
+	public static void main(String[] args) {	
+		System.out.println("test test test");
 
         }
 
