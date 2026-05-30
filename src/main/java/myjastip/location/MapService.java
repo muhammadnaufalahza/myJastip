@@ -1,5 +1,8 @@
 package myjastip.location;
 
-public class MapService {
+public class MapService extends Location implements DeliveryTracking {
 
+    
+    
+    
 }
