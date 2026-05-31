@@ -20,22 +20,16 @@ VM Arguments untuk JavaFX:
 
 
 public class MyJastip extends Application {
-	@Override
-	public void start(Stage stage) {
-		try {
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(createContent(),400,400);
-			stage.setScene(scene);
-			stage.show();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	private Parent createContent() {
-        return new StackPane(new Text("-- Sistem Jastip --"));
-    }
-	
+		return new StackPane(new Text("Sistem Jastip"));
+	}
+
+	@Override
+	public void start(Stage stage) throws Exception {
+		stage.setScene(new Scene(createContent(), 300, 300));
+		stage.show();
+	}
+
 	public static void main(String[] args) {	
 		ArrayList<Item> items = new ArrayList<>();
 		ArrayList<User> users = new ArrayList<>();

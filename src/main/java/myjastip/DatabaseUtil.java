@@ -1,6 +1,7 @@
 package myjastip;
 
 import myjastip.storage.Item;
+import org.postgresql.util.PSQLException;
 
 import java.sql.*;
 
@@ -12,27 +13,12 @@ public class DatabaseUtil {
     public static Connection getConnection() throws SQLException {
     	Scanner sc = new Scanner(System.in);
     	System.out.print("Masukkan Password Supabase: ");
+
         String PASSWORD = sc.nextLine();
         String USER = "postgres";
         String URL = "jdbc:postgresql://aws-1-ap-south-1.pooler.supabase.com:6543/postgres?user=postgres.stmeucoddhqzfblbtrne&password=" + PASSWORD;
 
         return DriverManager.getConnection(URL);
-    }
-
-    @Deprecated
-    public static void initializeDB() {
-        
-    	try (Connection connection = getConnection()) {
-            Statement statement = connection.createStatement();
-            String query = "SELECT * FROM \"items\";";
-            var resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString("itemName"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    	
     }
 
     public static void insertItems(ArrayList<Item> items) {
@@ -58,9 +44,13 @@ public class DatabaseUtil {
                 }
 
             }
+        } catch (PSQLException e) {
+            System.out.println("Error pada PSQLException");
+            System.exit(0);
         } catch (Exception e) {
-            System.out.println("Gagal mengisi item");
-            e.printStackTrace();
+            System.out.println("Terjadi Error");
+            System.exit(0);
+
         }
     }
 }
