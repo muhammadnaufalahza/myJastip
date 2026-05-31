@@ -1,5 +1,7 @@
 package myjastip.users;
 
+import myjastip.payment.Payable;
+
 public abstract class User {
 	private String userId;
 	private String name;

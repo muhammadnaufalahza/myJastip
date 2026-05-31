@@ -17,7 +17,7 @@ public class DatabaseUtil {
 
     public static Connection getConnection() throws SQLException {
     	Scanner sc = new Scanner(System.in);
-    	System.out.printf("Masukkan Password PostgreSQL: ");
+    	System.out.print("Masukkan Password PostgreSQL: ");
         return DriverManager.getConnection(URL, USER, sc.nextLine());
     }
     
