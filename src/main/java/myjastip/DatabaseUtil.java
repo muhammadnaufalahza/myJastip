@@ -2,20 +2,13 @@ package myjastip;
 
 import myjastip.storage.Item;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class DatabaseUtil {
-	
-//    private static final String URL = "jdbc:postgresql://localhost:5432/MYJASTIP";
-//    private static final String PASS = "";
-
     public static Connection getConnection() throws SQLException {
     	Scanner sc = new Scanner(System.in);
     	System.out.print("Masukkan Password Supabase: ");
@@ -25,12 +18,13 @@ public class DatabaseUtil {
 
         return DriverManager.getConnection(URL);
     }
-    
+
+    @Deprecated
     public static void initializeDB() {
         
     	try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
-            String query = "SELECT * FROM \"ITEMS\";";
+            String query = "SELECT * FROM \"items\";";
             var resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 System.out.println(resultSet.getString("itemName"));
@@ -44,16 +38,24 @@ public class DatabaseUtil {
     public static void insertItems(ArrayList<Item> items) {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
-            String query = "SELECT * FROM \"ITEMS\";";
+            String query = "SELECT * FROM \"items\";";
             var resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                String itemId = resultSet.getString("itemId");
-                String itemName = resultSet.getString("itemName");
+                String itemId = resultSet.getString("id");
+                String itemName = resultSet.getString("name");
                 String itemDescription = resultSet.getString("description");
-                double basePrice = resultSet.getDouble("basePrice");
-                String storeLocationName = resultSet.getString("storeLocationName");
+                double basePrice = resultSet.getDouble("base_price");
+                String storeLocationName = resultSet.getString("store_location_name");
+                Array categories = resultSet.getArray("categories");
 
-                items.add(new Item(itemId, itemName, itemDescription, basePrice, storeLocationName, new ArrayList<>()));
+
+                if (categories != null) {
+                    String[] javaArray = (String[]) categories.getArray();
+                    ArrayList<String> itemCategories = new ArrayList<String>(Arrays.asList(javaArray));
+                    items.add(new Item(itemId, itemName, itemDescription, basePrice, storeLocationName, itemCategories));
+                } else {
+                    items.add(new Item(itemId, itemName, itemDescription, basePrice, storeLocationName, new ArrayList<String>()));
+                }
 
             }
         } catch (Exception e) {

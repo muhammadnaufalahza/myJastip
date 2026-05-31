@@ -9,8 +9,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import myjastip.storage.Item;
+import myjastip.users.User;
 
 import java.util.ArrayList;
+
+/*
+VM Arguments untuk JavaFX:
+--module-path "D:\Libs\openjfx-26.0.1_windows-x64_bin-sdk\javafx-sdk-26.0.1\lib" --add-modules javafx.controls,javafx.fxml --enable-native-access=javafx.graphics
+*/
+
 
 public class MyJastip extends Application {
 	@Override
@@ -30,36 +37,17 @@ public class MyJastip extends Application {
     }
 	
 	public static void main(String[] args) {	
-		System.out.println("test test test");
-
 		ArrayList<Item> items = new ArrayList<>();
+		ArrayList<User> users = new ArrayList<>();
 
-
-                
 		DatabaseUtil.insertItems(items);
 
 		for (Item i : items) {
 			System.out.println(i.getItemDetails());
 		}
 
-//		Test PostgreSQL Database
-		
-//		Application.launch(MyJastip.class, args);
-                
-
-//     	VM Arguments:
-//		--module-path "D:\Libs\openjfx-26.0.1_windows-x64_bin-sdk\javafx-sdk-26.0.1\lib" --add-modules javafx.controls,javafx.fxml --enable-native-access=javafx.graphics
+//		Application.launch(MyJastip.class, args); // Untuk membuka JavaFx
 
         }
 
 }
-
-
-//public class MyJastip {
-//
-//	public static void main(String[] args) {
-//		System.out.println("Hello world!");
-//
-//        }
-//
-//}
