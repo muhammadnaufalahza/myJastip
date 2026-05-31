@@ -11,7 +11,10 @@ import javafx.stage.Stage;
 import myjastip.storage.Item;
 import myjastip.users.User;
 
+import javax.xml.crypto.Data;
+import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /*
 VM Arguments untuk JavaFX:
@@ -30,14 +33,30 @@ public class MyJastip extends Application {
 		stage.show();
 	}
 
-	public static void main(String[] args) {	
+
+
+
+	public static void main(String[] args) throws Exception {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Masukkan Password Supabase: ");
+
+		final String PASSWORD = sc.nextLine();
+
+		Connection connection = DatabaseUtil.getConnection(PASSWORD);
+
 		ArrayList<Item> items = new ArrayList<>();
 		ArrayList<User> users = new ArrayList<>();
 
-		DatabaseUtil.insertItems(items);
+		DatabaseUtil.insertItems(items, connection);
 
 		for (Item i : items) {
 			System.out.println(i.getItemDetails());
+		}
+
+		DatabaseUtil.insertUsers(users, connection);
+
+		for (User u : users) {
+			System.out.println(u.toString());
 		}
 
 		System.exit(0);
@@ -45,5 +64,6 @@ public class MyJastip extends Application {
 //		Application.launch(MyJastip.class, args); // Untuk membuka JavaFx
 
         }
+
 
 }

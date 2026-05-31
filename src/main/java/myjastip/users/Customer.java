@@ -12,6 +12,11 @@ public class Customer extends User implements Payable {
 	private String address;
 	private Cart cart;
 
+	public Customer(String userId, String name, String email, String password, String phoneNumber, String address, Cart cart) {
+		super(userId, name, email, password, phoneNumber);
+		this.address = address;
+		this.cart = cart;
+	}
 
 	@Override
 	public void payment(double amount) {

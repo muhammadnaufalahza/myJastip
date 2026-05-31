@@ -1,11 +1,12 @@
 package myjastip.users;
 
-public class Jastiper {
+public class Jastiper extends User {
     private double rating;
-    private double isVerified;
-    private double isAvailable;
+    private boolean isVerified;
+    private boolean isAvailable;
 
-    public Jastiper(double rating, double isVerified, double isAvailable) {
+    public Jastiper(String userId, String name, String email, String password, String phoneNumber, double rating, boolean isVerified, boolean isAvailable) {
+        super(userId, name, email, password, phoneNumber);
         this.rating = rating;
         this.isVerified = isVerified;
         this.isAvailable = isAvailable;
