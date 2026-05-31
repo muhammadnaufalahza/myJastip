@@ -39,5 +39,11 @@ public class Item {
 
 	}
 
+	public double getBasePrice() {
+		return basePrice;
+	}
 
+	public String getItemId() {
+		return itemId;
+	}
 }

@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import myjastip.storage.Item;
+import myjastip.users.Customer;
 import myjastip.users.User;
 
 import javax.xml.crypto.Data;
@@ -58,6 +59,8 @@ public class MyJastip extends Application {
 		for (User u : users) {
 			System.out.println(u.toString());
 		}
+
+		users.get(0).login();
 
 		System.exit(0);
 
