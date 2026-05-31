@@ -15,7 +15,3 @@ public class Location {
         return "latitude: " + latitude + ", longtitude: " + longtitude;
     }
 }
-    
-    
-
-    
