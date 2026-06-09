@@ -3,12 +3,12 @@ package myjastip.location;
 public class Location {
     private String location;
     private double latitude;
-    private double longitude;
+    private double longtitude;
 
     public Location(String location, double latitude, double longitude) {
         this.location = location;
         this.latitude = latitude;
-        this.longitude = longitude;
+        this.longtitude = longtitude;
     }
 
     public void setCoordinate(double latitude, double longitude) {
@@ -21,8 +21,6 @@ public class Location {
                 throw new IllegalArgumentException("Longitude tidak valid");
             }
 
-            this.latitude = latitude;
-            this.longitude = longitude;
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
@@ -30,7 +28,7 @@ public class Location {
     }
 
     public String getLocation() {
-        return location + " (" + latitude + ", " + longitude + ")";
+        return location + " (" + latitude + ", " + longtitude + ")";
     }
 
     public double getLatitude() {
@@ -38,6 +36,6 @@ public class Location {
     }
 
     public double getLongitude() {
-        return longitude;
+        return longtitude;
     }
 }

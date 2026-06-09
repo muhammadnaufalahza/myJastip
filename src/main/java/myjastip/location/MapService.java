@@ -30,9 +30,9 @@ public class MapService {
             }
 
             double lat = lok1.getLatitude() - lok2.getLatitude();
-            double lng = lok1.getLongitude() - lok2.getLongitude();
+            double lon = lok1.getLongitude() - lok2.getLongitude();
 
-            return Math.sqrt((lat * lat) + (lng * lng));
+            return Math.sqrt((lat * lat) + (lon * lon));
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
