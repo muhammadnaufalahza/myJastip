@@ -2,6 +2,7 @@ package myjastip;
 
 import javafx.application.Application;
 import myjastip.app.MyJastipWindow;
+import myjastip.db.DatabaseUtil;
 import myjastip.storage.Item;
 import myjastip.users.User;
 
@@ -16,7 +17,6 @@ VM Arguments untuk JavaFX:
 */
 
 public class MyJastip {
-
 	public static void main(String[] args) throws Exception {
 
  		try {
@@ -40,7 +40,7 @@ public class MyJastip {
 			System.out.println("Gagal menghubungkan Database");
 		}
 
-//		Application.launch(MyJastipWindow.class, args); // Untuk membuka JavaFx
+		Application.launch(MyJastipWindow.class, args); // Untuk membuka JavaFx
 
 
 		System.exit(0);

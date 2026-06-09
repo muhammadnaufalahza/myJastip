@@ -4,12 +4,13 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import myjastip.users.User;
 
 public class MyJastipWindow extends Application {
 
     private Stage primaryStage;
     private AuthView authView;
-//    private DashboardView dashboardView;
+    private DashboardView dashboardView;
 
     @Override
     public void start(Stage stage) {
@@ -19,6 +20,7 @@ public class MyJastipWindow extends Application {
         this.primaryStage.setTitle("myJastip");
 
         this.authView = new AuthView(this);
+        this.dashboardView = new DashboardView(this);
 
         showLoginScene();
         this.primaryStage.show();
@@ -28,8 +30,12 @@ public class MyJastipWindow extends Application {
         primaryStage.setScene(authView.getLoginScene());
     }
 
-    // Metode untuk pindah ke halaman Register
     public void showRegisterScene() {
         primaryStage.setScene(authView.getRegisterScene());
+    }
+
+    public void showDashboardScene(User user) {
+        dashboardView.setUser(user);
+        primaryStage.setScene(dashboardView.getDashboardScene());
     }
 }

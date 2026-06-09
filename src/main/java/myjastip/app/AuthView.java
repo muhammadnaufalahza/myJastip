@@ -5,6 +5,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import myjastip.db.DatabaseUtil;
+import myjastip.users.User;
+
 public class AuthView {
 
     private final MyJastipWindow appWindow;
@@ -39,9 +42,23 @@ public class AuthView {
 
         registerLink.setOnAction(e -> appWindow.showRegisterScene());
 
-//        loginButton.setOnAction(e -> {
-//            }
-//        });
+        loginButton.setOnAction(e -> {
+            String name = usernameInput.getText();
+            String pass = passwordInput.getText();
+
+            if (!(name.isEmpty() || pass.isEmpty())) {
+                String userId = DatabaseUtil.getUserId(name, pass);
+                User user = DatabaseUtil.getUser(userId);
+                if (user.isNull()) {
+                    appWindow.showDashboardScene(user);
+//                    System.out.println(user.getName());
+                } else {
+                    System.out.println("User tidak ditemukan!");
+                }
+            } else {
+                System.out.println("Isi User dan password");
+            }
+        });
 
         layout.getChildren().addAll(titleLabel, usernameInput, passwordInput, loginButton, registerLink);
         loginScene = new Scene(layout, 600, 400);
