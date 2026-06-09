@@ -6,8 +6,10 @@ import myjastip.db.DatabaseUtil;
 import myjastip.storage.Item;
 import myjastip.users.User;
 
+import java.awt.*;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /*
 
@@ -40,7 +42,13 @@ public class MyJastip {
 			System.out.println("Gagal menghubungkan Database");
 		}
 
-		Application.launch(MyJastipWindow.class, args); // Untuk membuka JavaFx
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Apakah anda ingin membuka aplikasi JavaFX? pastikan sudah setup JavaFX! [Y] ");
+		String in = sc.nextLine();
+
+		if (in.equals("y") || in.equals("Y")) {
+			Application.launch(MyJastipWindow.class, args); // Untuk membuka JavaFx
+		}
 
 
 		System.exit(0);
