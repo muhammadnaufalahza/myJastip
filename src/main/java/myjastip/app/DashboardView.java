@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import myjastip.users.Customer;
 import myjastip.users.User;
 
 public class DashboardView {
@@ -28,6 +29,8 @@ public class DashboardView {
         Label welcomeLabel = new Label("Selamat Datang, " + username + "!");
         welcomeLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
+        Label userTypeLabel = new Label("Akun: " + (user instanceof Customer ? "Customer" : "Jastiper"));
+
         Label infoLabel = new Label("Ini adalah halaman Dashboard Utama.");
 
         Button logoutButton = new Button("Keluar / Logout");
@@ -35,7 +38,7 @@ public class DashboardView {
 
         logoutButton.setOnAction(e -> appWindow.showLoginScene());
 
-        layout.getChildren().addAll(welcomeLabel, infoLabel, logoutButton);
+        layout.getChildren().addAll(welcomeLabel, userTypeLabel, infoLabel, logoutButton);
         dashboardScene = new Scene(layout, 600, 400);
     }
 

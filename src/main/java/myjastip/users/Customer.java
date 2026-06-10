@@ -45,7 +45,7 @@ public class Customer extends User implements Payable {
 		cart.addItem(item, qty);
 	}
 
-	public void cancelOrder(String orderld) {
+	public void cancelOrder(String orderId) {
 
 	}
 
@@ -69,7 +69,7 @@ public class Customer extends User implements Payable {
 
 	}
 
-	public void confirmReceipt(String orderld) {
+	public void confirmReceipt(String orderId) {
 
 	}
 
@@ -77,7 +77,7 @@ public class Customer extends User implements Payable {
 
 	}
 
-	public void refund(String orderld) {
+	public void refund(String orderId) {
 
 	}
 }

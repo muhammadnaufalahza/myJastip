@@ -3,7 +3,7 @@ package myjastip.location;
 import myjastip.location.Location;
 
 public class MapService {
-    private String mapProvider...;
+    private String mapProvider;
 
     public MapService(String mapProvider) {
         this.mapProvider = mapProvider;
