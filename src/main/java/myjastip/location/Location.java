@@ -1,10 +1,17 @@
 package myjastip.location;
+import java.util.Random;
 
 public class Location {
     private String location;
     private double latitude;
     private double longitude;
 
+    public Location() {
+        Random rand = new Random();
+        this.latitude = -90 + rand.nextFloat() * 180;
+        this.longitude = -180 + rand.nextFloat() * 360;
+        this.location = "(" + latitude + ", " + longitude + ")";
+    }
     public Location(String location, double latitude, double longitude) {
         this.location = location;
         this.latitude = latitude;

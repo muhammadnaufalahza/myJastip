@@ -14,5 +14,60 @@ public class Order {
 	public double calculateTotalBill() {
 		return 0.0;
 	}
-	
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public double getTotalItemPrice() {
+		return totalItemPrice;
+	}
+
+	public void setTotalItemPrice(double totalItemPrice) {
+		this.totalItemPrice = totalItemPrice;
+	}
+
+	public double getTransportationFee() {
+		return transportationFee;
+	}
+
+	public void setTransportationFee(double transportationFee) {
+		this.transportationFee = transportationFee;
+	}
+
+	public double getServiceFee() {
+		return serviceFee;
+	}
+
+	public void setServiceFee(double serviceFee) {
+		this.serviceFee = serviceFee;
+	}
+
+	public double getTotalBill() {
+		return totalBill;
+	}
+
+	public void setTotalBill(double totalBill) {
+		this.totalBill = totalBill;
+	}
 }

@@ -33,11 +33,11 @@ public class MyJastip {
 				System.out.println(i.getItemDetails());
 			}
 
-			DatabaseUtil.insertUsers(users, connection);
+//			DatabaseUtil.insertUsers(users, connection);
 
-			for (User u : users) {
-				System.out.println(u.toString());
-			}
+//			for (User u : users) {
+//				System.out.println(u.toString());
+//			}
 		} catch (Exception e) {
 			System.out.println("Gagal menghubungkan Database");
 		}

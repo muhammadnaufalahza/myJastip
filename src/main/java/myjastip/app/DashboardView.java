@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import myjastip.db.DatabaseUtil;
 import myjastip.storage.CartItem;
 import myjastip.users.Customer;
 import myjastip.users.User;
@@ -29,9 +30,10 @@ public class DashboardView {
             HBox itemBox = new HBox(12);
 
             Label itemLabel = new Label(cartItem.getItem().getItemName() + " x" + cartItem.getQuantity());
-//            Label itemQty = new Label(cartItem.getQuantity());
             Button itemQtyAdd = new Button("+");
             Button itemQtyMin = new Button("-");
+            itemLabel.setMinWidth(100);
+            itemLabel.setMaxWidth(800);
             itemQtyAdd.setOnAction(e -> {
                 cartItem.addQuanitity(1);
                 itemLabel.setText(cartItem.getItem().getItemName() + " x" + cartItem.getQuantity());
@@ -67,7 +69,7 @@ public class DashboardView {
 
         Label infoLabel = new Label("Ini adalah halaman Dashboard Utama.");
 
-        Button logoutButton = new Button("Keluar / Logout");
+        Button logoutButton = new Button("Logout");
         logoutButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
 
         logoutButton.setOnAction(e -> appWindow.showLoginScene());
@@ -83,6 +85,23 @@ public class DashboardView {
             storeScrollPane.setContent(cartsMenu());
 
             Button orderButton = new Button("Buat Pesanan");
+            orderButton.setOnAction(e -> {
+                Customer customer = (Customer) user;
+                if (!(customer.getCart().isCartEmpty())) {
+                    DatabaseUtil.insertOrder(
+                            "Sending",
+                            customer.getOrderLocation().getLocation(),
+                            customer.getOrderLocation().getLatitude(), customer.getOrderLocation().getLongitude(),
+                            customer.getCart().calculateTotalPrice(), customer.getCart().calculateTotalPrice() * 0.1, 10_000.0
+                    );
+                    customer.getCart().emptyCart();
+                    storeScrollPane.setContent(cartsMenu());
+                    System.out.println("Pesanan telah dibuat");
+                } else {
+                    System.out.println("Pesanan Kosong");
+                }
+            });
+
             layout.getChildren().addAll(welcomeLabel, userTypeLabel, infoLabel, storeButton, storeScrollPane, orderButton, logoutButton);
         }
         else {

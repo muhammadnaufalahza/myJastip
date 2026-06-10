@@ -28,6 +28,10 @@ public class Cart {
 		cartItems.clear();
 	}
 
+	public boolean isCartEmpty() {
+		return cartItems.isEmpty();
+	}
+
 	public ArrayList<CartItem> getCartItems() {
 		return cartItems;
 	}

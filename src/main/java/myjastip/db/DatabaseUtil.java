@@ -1,5 +1,6 @@
 package myjastip.db;
 
+import myjastip.payment.Order;
 import myjastip.storage.Cart;
 import myjastip.storage.Item;
 import myjastip.users.Customer;
@@ -58,7 +59,7 @@ public class DatabaseUtil {
             if (isJastiper) {
                 return new Jastiper(userId, userName, userEmail, userPassword, userPhoneNumber, 0.0, false, false);
             } else {
-                return new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, userAddress, new Cart());
+                return new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, userAddress);
             }
 
         } catch (PSQLException e) {
@@ -106,35 +107,53 @@ public class DatabaseUtil {
         }
     }
 
-    public static void insertUsers(ArrayList<User> users, Connection connection) {
+
+    public static void insertOrder(String status, String locationName, double locationLatitude, double locationLongitude, double totalItemPrice, double transportationFee, double serviceFee) {
         try {
-            Statement statement = connection.createStatement();
-            String query = "SELECT * FROM \"users\";";
-            var resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                String userId = resultSet.getString("id");
-                String userName = resultSet.getString("name");
-                String userEmail = resultSet.getString("email");
-                String userPassword = resultSet.getString("password");
-                String userPhoneNumber = resultSet.getString("phone_number");
-                String userAddress = resultSet.getString("address");
-                boolean isJastiper = resultSet.getBoolean("is_jastiper");
+            Connection connection = getConnection();
+            String query = String.format("INSERT INTO orders (status, location_name, location_latitude, location_longitude, total_item_price, transportation_fee, service_fee) VALUES ('%s', '%s', %f, %f, %f, %f, %f);", status, locationName, locationLatitude, locationLongitude, totalItemPrice, transportationFee, serviceFee);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            int rowsInserted = pstmt.executeUpdate();
 
-                if (isJastiper) {
-                    users.add(new Jastiper(userId, userName, userEmail, userPassword, userPhoneNumber, 0.0, false, false));
-                } else {
-                    users.add(new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, userAddress, new Cart()));
-                }
-
-            }
         } catch (PSQLException e) {
-            System.out.println("Error pada PSQLException");
+            System.out.println("Error pada PSQLException pada insertOrder()");
+            e.printStackTrace();
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error");
+            System.out.println("Terjadi Error pada insertOrder()");
             System.exit(0);
+
         }
     }
+//    public static void insertUsers(ArrayList<User> users, Connection connection) {
+//        try {
+//            Statement statement = connection.createStatement();
+//            String query = "SELECT * FROM \"users\";";
+//            var resultSet = statement.executeQuery(query);
+//            while (resultSet.next()) {
+//                String userId = resultSet.getString("id");
+//                String userName = resultSet.getString("name");
+//                String userEmail = resultSet.getString("email");
+//                String userPassword = resultSet.getString("password");
+//                String userPhoneNumber = resultSet.getString("phone_number");
+//                String userAddress = resultSet.getString("address");
+//                boolean isJastiper = resultSet.getBoolean("is_jastiper");
+//
+//                if (isJastiper) {
+//                    users.add(new Jastiper(userId, userName, userEmail, userPassword, userPhoneNumber, 0.0, false, false));
+//                } else {
+//                    users.add(new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, userAddress, new Cart()));
+//                }
+//
+//            }
+//        } catch (PSQLException e) {
+//            System.out.println("Error pada PSQLException");
+//            System.exit(0);
+//        } catch (Exception e) {
+//            System.out.println("Terjadi Error");
+//            System.exit(0);
+//        }
+//    }
 
 
 

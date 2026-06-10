@@ -51,9 +51,8 @@ public class AuthView {
                 User user = DatabaseUtil.getUser(userId);
                 if (user.isNull()) {
                     appWindow.showDashboardScene(user);
-//                    System.out.println(user.getName());
                 } else {
-                    System.out.println("User tidak ditemukan!");
+                    System.out.println("User atau Password Salah!");
                 }
             } else {
                 System.out.println("Isi User dan password");
