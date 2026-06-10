@@ -3,12 +3,12 @@ package myjastip.location;
 public class Location {
     private String location;
     private double latitude;
-    private double longtitude;
+    private double longitude;
 
     public Location(String location, double latitude, double longitude) {
         this.location = location;
         this.latitude = latitude;
-        this.longtitude = longtitude;
+        this.longitude = longitude;
     }
 
     public void setCoordinate(double latitude, double longitude) {
@@ -28,7 +28,7 @@ public class Location {
     }
 
     public String getLocation() {
-        return location + " (" + latitude + ", " + longtitude + ")";
+        return location + " (" + latitude + ", " + longitude + ")";
     }
 
     public double getLatitude() {
@@ -36,6 +36,6 @@ public class Location {
     }
 
     public double getLongitude() {
-        return longtitude;
+        return longitude;
     }
 }
