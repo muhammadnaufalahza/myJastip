@@ -1,6 +1,7 @@
 package myjastip.payment;
 
 import myjastip.location.Location;
+import myjastip.storage.Cart;
 
 import java.util.HashMap;
 
@@ -13,16 +14,20 @@ public class Order {
 	private double serviceFee;
 
 	private double totalBill;
-	private HashMap<String, Integer> orderedItems;
+	private Cart orderedCart;
 
-	public Order(String orderId, String orderStatus, Location location, double totalItemPrice, double transportationFee, double serviceFee, HashMap<String, Integer> orderedItems) {
+	public Order() {
+
+	}
+
+	public Order(String orderId, String orderStatus, Location location, double totalItemPrice, double transportationFee, double serviceFee, Cart orderedCart) {
 		this.orderId = orderId;
 		this.orderStatus = orderStatus;
 		this.location = location;
 		this.totalItemPrice = totalItemPrice;
 		this.transportationFee = transportationFee;
 		this.serviceFee = serviceFee;
-		this.orderedItems = orderedItems;
+		this.orderedCart = orderedCart;
 	}
 
 	public double calculateTotalBill() {
@@ -85,11 +90,11 @@ public class Order {
 		this.totalBill = totalBill;
 	}
 
-	public HashMap<String, Integer> getOrderedItems() {
-		return orderedItems;
+	public Cart getOrderedCart() {
+		return orderedCart;
 	}
 
-	public void setOrderedItems(HashMap<String, Integer> orderedItems) {
-		this.orderedItems = orderedItems;
+	public void setOrderedCart(Cart orderedCart) {
+		this.orderedCart = orderedCart;
 	}
 }
