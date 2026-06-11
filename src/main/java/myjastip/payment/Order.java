@@ -2,6 +2,8 @@ package myjastip.payment;
 
 import myjastip.location.Location;
 
+import java.util.HashMap;
+
 public class Order {
 	private String orderId;
 	private String orderStatus;
@@ -9,8 +11,20 @@ public class Order {
 	private double totalItemPrice;
 	private double transportationFee;
 	private double serviceFee;
+
 	private double totalBill;
-	
+	private HashMap<String, Integer> orderedItems;
+
+	public Order(String orderId, String orderStatus, Location location, double totalItemPrice, double transportationFee, double serviceFee, HashMap<String, Integer> orderedItems) {
+		this.orderId = orderId;
+		this.orderStatus = orderStatus;
+		this.location = location;
+		this.totalItemPrice = totalItemPrice;
+		this.transportationFee = transportationFee;
+		this.serviceFee = serviceFee;
+		this.orderedItems = orderedItems;
+	}
+
 	public double calculateTotalBill() {
 		return 0.0;
 	}
@@ -69,5 +83,13 @@ public class Order {
 
 	public void setTotalBill(double totalBill) {
 		this.totalBill = totalBill;
+	}
+
+	public HashMap<String, Integer> getOrderedItems() {
+		return orderedItems;
+	}
+
+	public void setOrderedItems(HashMap<String, Integer> orderedItems) {
+		this.orderedItems = orderedItems;
 	}
 }

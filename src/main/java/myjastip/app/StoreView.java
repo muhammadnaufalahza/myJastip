@@ -69,8 +69,6 @@ public class StoreView {
             }
         );
 
-
-
 //        itemPane.getChildren().addAll(sp);
         itemBox.getChildren().addAll(sp, itemName, itemPrice, itemStoreLocation, itemCategories, orderButton);
 
@@ -107,7 +105,7 @@ public class StoreView {
         scrollPane.setFitToWidth(true);
 
         Button logoutButton = new Button("Kembali ke Dashboard");
-        logoutButton.setStyle("-fx-background-color: #4067e4; -fx-text-fill: white;");
+        logoutButton.setStyle("-fx-background-color: #4067e4; -fx-text-fill: white;  -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
         logoutButton.setOnAction(e -> appWindow.showDashboardScene(customer));
 

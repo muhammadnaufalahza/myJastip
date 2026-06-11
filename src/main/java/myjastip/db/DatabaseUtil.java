@@ -1,5 +1,6 @@
 package myjastip.db;
 
+import com.google.gson.Gson;
 import myjastip.payment.Order;
 import myjastip.storage.Cart;
 import myjastip.storage.Item;
@@ -108,10 +109,26 @@ public class DatabaseUtil {
     }
 
 
-    public static void insertOrder(String status, String locationName, double locationLatitude, double locationLongitude, double totalItemPrice, double transportationFee, double serviceFee) {
+    public static void insertOrder(String status, String locationName, double locationLatitude, double locationLongitude, double totalItemPrice, double transportationFee, double serviceFee, String recieverId, Cart cart) {
         try {
             Connection connection = getConnection();
-            String query = String.format("INSERT INTO orders (status, location_name, location_latitude, location_longitude, total_item_price, transportation_fee, service_fee) VALUES ('%s', '%s', %f, %f, %f, %f, %f);", status, locationName, locationLatitude, locationLongitude, totalItemPrice, transportationFee, serviceFee);
+//            String cartJson = "{\n" +
+//                    "\t\"items\": [\n" +
+//                    "\t\t{\n" +
+//                    "\t\t\t\"item_id\": \"uuid\",\n" +
+//                    "\t\t\t\"quantity\": 6\n" +
+//                    "\t\t},\n" +
+//                    "\t\t{\n" +
+//                    "\t\t\t\"item_id\": \"uuid2\",\n" +
+//                    "\t\t\t\"quantity\": 7\n" +
+//                    "\t\t}\n" +
+//                    "\t]\n" +
+//                    "}";
+
+            Gson cartGson = new Gson();
+            String cartJson = cartGson.toJson(cart);
+
+            String query = String.format("INSERT INTO orders (status, location_name, location_latitude, location_longitude, total_item_price, transportation_fee, service_fee, receiver_id, order_items) VALUES ('%s', '%s', %f, %f, %f, %f, %f, '%s', '%s');", status, locationName, locationLatitude, locationLongitude, totalItemPrice, transportationFee, serviceFee, recieverId, cartJson);
             PreparedStatement pstmt = connection.prepareStatement(query);
             int rowsInserted = pstmt.executeUpdate();
 

@@ -26,7 +26,7 @@ public class AuthView {
         layout.setAlignment(Pos.CENTER);
 
         Label titleLabel = new Label("Login");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
         TextField usernameInput = new TextField();
         usernameInput.setPromptText("Username");
@@ -36,7 +36,7 @@ public class AuthView {
 
         Button loginButton = new Button("Masuk");
         loginButton.setMaxWidth(Double.MAX_VALUE);
-        loginButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        loginButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
         Hyperlink registerLink = new Hyperlink("Belum punya akun? Daftar");
 

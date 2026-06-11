@@ -54,9 +54,9 @@ public class Customer extends User implements Payable {
 
 	}
 
-	public Order createOrder() {
-		return new Order();
-	}
+//	public Order createOrder() {
+//		return new Order();
+//	}
 
 	public void rate(Jastiper service, int value) {
 

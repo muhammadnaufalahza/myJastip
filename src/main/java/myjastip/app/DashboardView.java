@@ -31,7 +31,11 @@ public class DashboardView {
 
             Label itemLabel = new Label(cartItem.getItem().getItemName() + " x" + cartItem.getQuantity());
             Button itemQtyAdd = new Button("+");
+            itemQtyAdd.setStyle("-fx-background-color: white; -fx-border-color: green; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px;");
+
             Button itemQtyMin = new Button("-");
+            itemQtyMin.setStyle("-fx-background-color: white; -fx-border-color: red; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px;");
+
             itemLabel.setMinWidth(100);
             itemLabel.setMaxWidth(800);
             itemQtyAdd.setOnAction(e -> {
@@ -70,12 +74,14 @@ public class DashboardView {
         Label infoLabel = new Label("Ini adalah halaman Dashboard Utama.");
 
         Button logoutButton = new Button("Logout");
-        logoutButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+        logoutButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
         logoutButton.setOnAction(e -> appWindow.showLoginScene());
 
         if (user instanceof Customer) {
             Button storeButton = new Button("Toko");
+            storeButton.setStyle("-fx-background-color: #88FF74; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px;");
+
             storeButton.setOnAction(e -> appWindow.showStoreScene((Customer) user));
 
             ScrollPane storeScrollPane = new ScrollPane();
@@ -92,7 +98,10 @@ public class DashboardView {
                             "Sending",
                             customer.getOrderLocation().getLocation(),
                             customer.getOrderLocation().getLatitude(), customer.getOrderLocation().getLongitude(),
-                            customer.getCart().calculateTotalPrice(), customer.getCart().calculateTotalPrice() * 0.1, 10_000.0
+                            customer.getCart().calculateTotalPrice(), customer.getCart().calculateTotalPrice() * 0.1, 10_000.0,
+                            customer.getUserId(),
+                            customer.getCart()
+
                     );
                     customer.getCart().emptyCart();
                     storeScrollPane.setContent(cartsMenu());
