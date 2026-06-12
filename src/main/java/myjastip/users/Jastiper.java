@@ -6,6 +6,10 @@ public class Jastiper extends User {
     private boolean isVerified;
     private boolean isAvailable;
 
+    public Jastiper() {
+        super();
+    }
+
     public Jastiper(String userId, String name, String email, String password, String phoneNumber, double rating, boolean isVerified, boolean isAvailable) {
         super(userId, name, email, password, phoneNumber);
         this.rating = rating;

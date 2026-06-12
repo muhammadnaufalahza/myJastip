@@ -1,10 +1,13 @@
 package myjastip;
 
 import javafx.application.Application;
-import myjastip.app.MyJastipApplication;
+import myjastip.app.MyJastipWindow;
+import myjastip.db.DatabaseUtil;
+import myjastip.payment.Order;
 import myjastip.storage.Item;
 import myjastip.users.User;
 
+import java.awt.*;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -16,39 +19,46 @@ VM Arguments untuk JavaFX:
 
 */
 
-
 public class MyJastip {
-
 	public static void main(String[] args) throws Exception {
-//		Application.launch(MyJastipApplication.class, args); // Untuk membuka JavaFx
 
-		Scanner sc = new Scanner(System.in);
-//		System.out.print("Masukkan Password Supabase: ");
-
-//		final String PASSWORD = sc.nextLine();
  		try {
 			Connection connection = DatabaseUtil.getConnection();
 
 			ArrayList<Item> items = new ArrayList<>();
-			ArrayList<User> users = new ArrayList<>();
+//			ArrayList<User> users = new ArrayList<>();
+			ArrayList<Order> orders = new ArrayList<>();
 
-			DatabaseUtil.insertItems(items, connection);
+			DatabaseUtil.insertItems(items);
 
 			for (Item i : items) {
 				System.out.println(i.getItemDetails());
 			}
 
-			DatabaseUtil.insertUsers(users, connection);
+//			DatabaseUtil.insertUsers(users, connection);
 
-			for (User u : users) {
-				System.out.println(u.toString());
+//			for (User u : users) {
+//				System.out.println(u.toString());
+//			}
+
+			DatabaseUtil.insertOrders(orders);
+
+			for (Order o : orders) {
+				System.out.println(o.getTotalItemPrice());
 			}
+
 		} catch (Exception e) {
 			System.out.println("Gagal menghubungkan Database");
 		}
 
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Apakah anda ingin membuka aplikasi JavaFX? pastikan sudah setup JavaFX! [Y] ");
+		String in = sc.nextLine();
 
-//		users.get(0).login();
+		if (in.equals("y") || in.equals("Y")) {
+			Application.launch(MyJastipWindow.class, args); // Untuk membuka JavaFx
+		}
+
 
 		System.exit(0);
 
