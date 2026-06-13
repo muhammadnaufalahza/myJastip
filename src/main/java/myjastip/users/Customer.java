@@ -13,6 +13,7 @@ public class Customer extends User implements Payable {
 	private String address;
 	private Cart cart = new Cart();
 	private Location orderLocation = new Location();
+	private ArrayList<Payment> paymentHistory = new ArrayList<>();
 
 	public Customer() {
 		super();
@@ -23,6 +24,7 @@ public class Customer extends User implements Payable {
 		this.address = address;
 		this.cart = new Cart();
 		this.orderLocation = new Location();
+		this.paymentHistory = new ArrayList<>();
 	}
 
 	@Override
@@ -43,26 +45,12 @@ public class Customer extends User implements Payable {
 		return paymentHistory;
 	}
 
-	public ArrayList<Item> searchItem(String keyword) {
-            ArrayList<Item> hasilCari = new ArrayList<>();
-            for(Item item : listItem ){
-                if (item.getItemName().toLowerCase().contains(keyword.toLowerCase())) {
-
-                    hasilCari.add(item);
-                }
-            }
-            return hasilCari;
-           
-	}
-
 	public void addToCart(Item item, int qty) {
 		cart.addItem(item, qty);
-                System.out.println("Nama Barang = " + item);
+                System.out.println("Nama Barang = " + item.getItemName());
                 System.out.println("Jumlah barang = " + qty);
                 System.out.println("Berhasil dimasukan ke Keranjang Belanja");
 	}
-
-
 
 	public void cancelOrder(String orderId) {
 
@@ -103,4 +91,19 @@ public class Customer extends User implements Payable {
 	}
 
 
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
+	public Location getOrderLocation() {
+		return orderLocation;
+	}
+
+	public void setOrderLocation(Location orderLocation) {
+		this.orderLocation = orderLocation;
+	}
+
+	public void setPaymentHistory(ArrayList<Payment> paymentHistory) {
+		this.paymentHistory = paymentHistory;
+	}
 }
