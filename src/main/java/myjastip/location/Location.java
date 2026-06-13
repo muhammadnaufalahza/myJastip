@@ -1,17 +1,10 @@
 package myjastip.location;
-import java.util.Random;
 
 public class Location {
     private String locationName;
     private double latitude;
     private double longitude;
 
-    public Location() {
-        Random rand = new Random();
-        this.latitude = -90 + rand.nextFloat() * 180;
-        this.longitude = -180 + rand.nextFloat() * 360;
-        this.locationName = "Random Location";
-    }
     public Location(String location, double latitude, double longitude) {
         this.locationName = location;
         this.latitude = latitude;
@@ -33,6 +26,8 @@ public class Location {
                 throw new IllegalArgumentException("Longitude tidak valid");
             }
 
+            this.latitude = latitude;
+            this.longitude = longitude;
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
