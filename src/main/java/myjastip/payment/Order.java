@@ -7,12 +7,12 @@ import java.util.HashMap;
 
 public class Order {
 	private String orderId;
-	private String orderStatus;
+	private OrderStatus orderStatus;
 	private Location location;
 	private double totalItemPrice;
 	private double transportationFee;
 	private double serviceFee;
-	private String recieverId;
+	private String receiverId;
 
 	private double totalBill;
 	private Cart orderedCart;
@@ -21,18 +21,20 @@ public class Order {
 
 	}
 
-	public Order(String orderId, String orderStatus, Location location, double totalItemPrice, double transportationFee, double serviceFee, Cart orderedCart) {
+	public Order(String orderId, OrderStatus orderStatus, Location location, double totalItemPrice, double transportationFee, double serviceFee, String receiverId, Cart orderedCart) {
 		this.orderId = orderId;
 		this.orderStatus = orderStatus;
 		this.location = location;
 		this.totalItemPrice = totalItemPrice;
 		this.transportationFee = transportationFee;
 		this.serviceFee = serviceFee;
+		this.receiverId = receiverId;
 		this.orderedCart = orderedCart;
 	}
 
 	public double calculateTotalBill() {
-		return 0.0;
+                totalBill = totalItemPrice + transportationFee + serviceFee;
+		return totalBill;
 	}
 
 	public String getOrderId() {
@@ -43,11 +45,11 @@ public class Order {
 		this.orderId = orderId;
 	}
 
-	public String getOrderStatus() {
+	public OrderStatus getOrderStatus() {
 		return orderStatus;
 	}
 
-	public void setOrderStatus(String orderStatus) {
+	public void setOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
 	}
 
@@ -99,11 +101,11 @@ public class Order {
 		this.orderedCart = orderedCart;
 	}
 
-	public String getRecieverId() {
-		return recieverId;
+	public String getReceiverId() {
+		return receiverId;
 	}
 
-	public void setRecieverId(String recieverId) {
-		this.recieverId = recieverId;
+	public void setReceiverId(String receiverId) {
+		this.receiverId = receiverId;
 	}
 }

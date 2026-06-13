@@ -27,12 +27,12 @@ public class StoreView {
     private final MyJastipWindow appWindow;
     private Scene storeScene;
     private Customer customer;
-    private ArrayList<Item> items = new ArrayList<>();
+    private final ArrayList<Item> items = new ArrayList<>();
 
     public StoreView(MyJastipWindow appWindow) {
         this.appWindow = appWindow;
         DatabaseUtil.insertItems(items);
-        createStoreScene();
+//        createStoreScene();
     }
     public VBox itemPane(Item item) {
         VBox itemBox = new VBox();

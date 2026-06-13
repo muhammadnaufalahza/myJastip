@@ -40,7 +40,7 @@ public class Location {
     }
 
     public String getLocationName() {
-        return locationName + " (" + latitude + ", " + longitude + ")";
+        return locationName;
     }
 
     public double getLatitude() {

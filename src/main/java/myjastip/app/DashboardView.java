@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import myjastip.db.DatabaseUtil;
 import myjastip.payment.Order;
+import myjastip.payment.OrderStatus;
 import myjastip.storage.CartItem;
 import myjastip.users.Customer;
 import myjastip.users.User;
@@ -26,7 +27,7 @@ public class DashboardView {
 
     public DashboardView(MyJastipWindow appWindow) {
         this.appWindow = appWindow;
-        createDashboardScene();
+//        createDashboardScene();
     }
 
     public VBox cartsMenu() {
@@ -73,23 +74,25 @@ public class DashboardView {
         DatabaseUtil.insertOrders(orders);
 
         for (Order order : orders) {
+            if (order.getOrderStatus() != OrderStatus.PENDING) continue;
             HBox orderMenu = new HBox(12);
 
             Label destinationLabel = new Label("Tujuan: " + order.getLocation().getLocationName());
-            Label recieverLabel = new Label("Penerima: " + DatabaseUtil.getUser(order.getRecieverId()));
-            Label itemLabel = new Label("Lokasi: " + order.getLocation());
+            Label recieverLabel = new Label("Penerima: " + DatabaseUtil.getUser(order.getReceiverId()).getName());
+            Label locationLabel = new Label("Lokasi: " + order.getLocation());
 
             HBox rightControl = new HBox();
             HBox.setHgrow(rightControl, Priority.ALWAYS);
             rightControl.setAlignment(Pos.CENTER_RIGHT);
+
             Button acceptButton = new Button("Terima Pesanan");
+            acceptButton.setOnAction(e -> orderBox.getChildren().remove(orderMenu));
+
             rightControl.getChildren().add(acceptButton);
 
             VBox orderSpec = new VBox();
-            orderSpec.getChildren().addAll(destinationLabel, recieverLabel, itemLabel);
-
+            orderSpec.getChildren().addAll(destinationLabel, recieverLabel, locationLabel);
             orderMenu.getChildren().addAll(orderSpec, rightControl);
-
             orderBox.getChildren().add(orderMenu);
 
         }
@@ -132,26 +135,16 @@ public class DashboardView {
 
             orderButton.setOnAction(e -> {
                 Customer customer = (Customer) user;
-                if (!(customer.getCart().isCartEmpty())) {
-                    DatabaseUtil.insertOrder(
-                            "Sending",
-                            customer.getOrderLocation().getLocationName(),
-                            customer.getOrderLocation().getLatitude(), customer.getOrderLocation().getLongitude(),
-                            customer.getCart().calculateTotalPrice(), customer.getCart().calculateTotalPrice() * 0.1, 10_000.0,
-                            customer.getUserId(),
-                            customer.getCart()
-                    );
-                    customer.getCart().emptyCart();
-                    storeScrollPane.setContent(cartsMenu());
-                    System.out.println("Pesanan telah dibuat");
-                } else {
-                    System.out.println("Pesanan Kosong");
-                }
+                customer.createOrder();
+                ((VBox) storeScrollPane.getContent()).getChildren().clear();
             });
 
             Button orderViewButton = new Button("Lihat Pesanan");
             orderViewButton.setStyle("-fx-background-color: #80BEFF; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px;");
-            orderViewButton.setOnAction(e -> appWindow.showCustomerOrdersScene((Customer) user));
+            orderViewButton.setOnAction(e -> {
+                appWindow.showCustomerOrdersScene((Customer) user);
+            });
+
 
             layout.getChildren().addAll(welcomeLabel, userTypeLabel, infoLabel, storeButton, storeScrollPane, orderButton, orderViewButton, logoutButton);
         }
