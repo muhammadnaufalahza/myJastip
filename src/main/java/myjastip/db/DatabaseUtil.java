@@ -165,6 +165,41 @@ public class DatabaseUtil {
         }
     }
 
+    public static void insertOrdersById(ArrayList<Order> orders, String userId) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("SELECT * FROM orders WHERE receiver_id = '%s'", userId);
+
+            var resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                String orderId = resultSet.getString("id");
+                String orderStatus = resultSet.getString("status");
+                String locationName = resultSet.getString("location_name");
+                double locationLatitude = resultSet.getDouble("location_latitude");
+                double locationLongitude = resultSet.getDouble("location_longitude");
+                double totalItemPrice = resultSet.getDouble("total_item_price");
+                double transportationFee = resultSet.getDouble("total_item_price");
+                double serviceFee = resultSet.getDouble("service_fee");
+                String rawOrderItems = resultSet.getString("order_items");
+                String receiverId = resultSet.getString("receiver_id");
+
+                Gson orderGson = new Gson();
+                Cart cart = orderGson.fromJson(rawOrderItems, Cart.class);
+
+                orders.add(new Order(orderId, orderStatus, new Location(locationName, locationLatitude, locationLongitude), totalItemPrice, transportationFee, serviceFee, cart));
+
+            }
+        } catch (PSQLException e) {
+            System.out.println("Error pada PSQLException pada insertItems()");
+            System.exit(0);
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada insertItems()");
+            System.exit(0);
+
+        }
+    }
+
 
     public static Order getOrder(String orderId) {
         if (orderId == null) return new Order();
