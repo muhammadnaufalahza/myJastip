@@ -127,16 +127,11 @@ public class Customer extends User implements Payable {
 
 	public void rate(Jastiper service, int value) {
 		try {
-
 			if (value < 1 || value > 5) {
-
 				throw new IllegalArgumentException("Rating harus 1 - 5");
 			}
-
 			service.addRating(value);
-
 		} catch (IllegalArgumentException e) {
-
 			System.out.println(e.getMessage());
 		}
 	}
@@ -170,6 +165,7 @@ public class Customer extends User implements Payable {
 	}
 
 	public ArrayList<Order> getOrders() {
+		DatabaseUtil.insertOrdersByReceiverId(orders, userId);
 		return orders;
 	}
 

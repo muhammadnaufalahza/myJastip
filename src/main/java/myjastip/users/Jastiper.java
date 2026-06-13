@@ -29,8 +29,9 @@ public class Jastiper extends User {
 //            if (!isVerified) {
 //                throw new Exception("Jastiper belum terverifikasi");
 //            }
-            acceptedOrders.add(order);
             updateOrderStatus(order, OrderStatus.OUT_FOR_DELIVERY);
+            DatabaseUtil.addJastiperId(order.getOrderId(), userId);
+
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -107,6 +108,7 @@ public class Jastiper extends User {
     }
 
     public ArrayList<Order> getAcceptedOrders() {
+        DatabaseUtil.insertOrdersByJastiperId(acceptedOrders, userId);
         return acceptedOrders;
     }
 

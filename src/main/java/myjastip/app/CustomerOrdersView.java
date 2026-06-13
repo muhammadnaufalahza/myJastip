@@ -26,7 +26,7 @@ public class CustomerOrdersView {
     }
     public VBox orderHistoryMenu() {
         VBox orderBox = new VBox(12);
-        DatabaseUtil.insertOrdersByReceiverId(customer.getOrders(), customer.getUserId());
+
         for (Order order : customer.getOrders()) {
             HBox orderMenu = new HBox(12);
 
@@ -39,9 +39,9 @@ public class CustomerOrdersView {
             rightControl.setAlignment(Pos.CENTER_RIGHT);
 
             Button cancelOrderButton = new Button("Batalkan Pesanan");
-//            if (order.getOrderStatus() == OrderStatus.DELIVERED || order.getOrderStatus() == OrderStatus.CONFIRMED || order.getOrderStatus() == OrderStatus.CANCELLED) {
-//                cancelOrderButton.setDisable(true);
-//            }
+            if (order.getOrderStatus() == OrderStatus.DELIVERED || order.getOrderStatus() == OrderStatus.CANCELLED) {
+                cancelOrderButton.setDisable(true);
+            }
             cancelOrderButton.setOnAction(e -> {
                 customer.cancelOrder(order);
                 cancelOrderButton.setDisable(true);
