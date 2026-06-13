@@ -18,10 +18,7 @@ public class Notification {
         this.readStatus = new HashMap<>();
     }
 
-    public Notification(String notificationId,
-                        String title,
-                        String messageBody,
-                        boolean isRead) {
+    public Notification(String notificationId,String title,String messageBody,boolean isRead) {
 
         this.notificationId = notificationId;
         this.title = title;
