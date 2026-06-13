@@ -1,7 +1,5 @@
 package myjastip.location;
 
-import myjastip.location.Location;
-
 public class MapService {
     private String mapProvider;
 
@@ -9,28 +7,28 @@ public class MapService {
         this.mapProvider = mapProvider;
     }
 
-    public void tampilkanPeta(Location lokasi) {
+    public void showMap(Location location) {
         try {
-            if (lokasi == null) {
+            if (location == null) {
                 throw new Exception("Lokasi tidak tersedia");
             }
 
             System.out.println("Provider: " + mapProvider);
-            System.out.println("Lokasi: " + lokasi.getLocation());
+            System.out.println("Lokasi: " + location.getLocationName());
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
 
-    public double hitungJarak(Location lok1, Location lok2) {
+    public double calculateDistance(Location loc1, Location loc2) {
         try {
-            if (lok1 == null || lok2 == null) {
+            if (loc1 == null || loc2 == null) {
                 throw new Exception("Lokasi tidak boleh kosong");
             }
 
-            double lat = lok1.getLatitude() - lok2.getLatitude();
-            double lon = lok1.getLongitude() - lok2.getLongitude();
+            double lat = loc1.getLatitude() - loc2.getLatitude();
+            double lon = loc1.getLongitude() - loc2.getLongitude();
 
             return Math.sqrt((lat * lat) + (lon * lon));
 
@@ -40,34 +38,34 @@ public class MapService {
         }
     }
 
-    public String getRoute(Location lok1, Location lok2) {
+    public String getRoute(Location loc1, Location loc2) {
         try {
-            if (lok1 == null || lok2 == null) {
+            if (loc1 == null || loc2 == null) {
                 throw new Exception("Lokasi tidak valid");
             }
 
             return "Rute dari "
-                    + lok1.getLocation()
+                    + loc1.getLocationName()
                     + " ke "
-                    + lok2.getLocation();
+                    + loc2.getLocationName();
 
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
     }
     
-    public String getRoute(Location lok1, Location lok2, String transportasi) {
+    public String getRoute(Location loc1, Location loc2, String transportasi) {
         try {
-            if (lok1 == null || lok2 == null) {
+            if (loc1 == null || loc2 == null) {
                 throw new Exception("Lokasi tidak valid");
             }
 
             return "Rute menggunakan "
                     + transportasi
                     + " dari "
-                    + lok1.getLocation()
+                    + loc1.getLocationName()
                     + " ke "
-                    + lok2.getLocation();
+                    + loc2.getLocationName();
 
         } catch (Exception e) {
             return "Error: " + e.getMessage();

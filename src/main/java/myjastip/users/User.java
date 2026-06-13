@@ -1,11 +1,11 @@
 package myjastip.users;
 
 public abstract class User {
-	private String userId;
-	private String name;
-	private String email;
-	private String password;
-	private String phoneNumber;
+	protected String userId;
+	protected String name;
+	protected String email;
+	protected String password;
+	protected String phoneNumber;
 
 	public User() {
 	}

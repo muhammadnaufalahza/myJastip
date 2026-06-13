@@ -26,7 +26,7 @@ public class AuthView {
         layout.setAlignment(Pos.CENTER);
 
         Label titleLabel = new Label("Login");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
         TextField usernameInput = new TextField();
         usernameInput.setPromptText("Username");
@@ -36,7 +36,7 @@ public class AuthView {
 
         Button loginButton = new Button("Masuk");
         loginButton.setMaxWidth(Double.MAX_VALUE);
-        loginButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        loginButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
         Hyperlink registerLink = new Hyperlink("Belum punya akun? Daftar");
 
@@ -51,9 +51,8 @@ public class AuthView {
                 User user = DatabaseUtil.getUser(userId);
                 if (user.isNull()) {
                     appWindow.showDashboardScene(user);
-//                    System.out.println(user.getName());
                 } else {
-                    System.out.println("User tidak ditemukan!");
+                    System.out.println("User atau Password Salah!");
                 }
             } else {
                 System.out.println("Isi User dan password");
@@ -88,7 +87,7 @@ public class AuthView {
         registerButton.setOnAction(e -> appWindow.showLoginScene());
 
         layout.getChildren().addAll(titleLabel, usernameInput, passwordInput, registerButton, loginLink);
-        registerScene = new Scene(layout, 600, 400);
+        registerScene = new Scene(layout, 1200, 800);
     }
 
     public Scene getLoginScene() {

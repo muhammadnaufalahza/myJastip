@@ -10,7 +10,7 @@ public class Payment {
         this.amount = amount;
         this.status = "Sukses";
         System.out.println("Pembayaran sebesar " + amount + " berhasil diproses.");
-}
+    }
 
     public String getReceipt() {
         return "ID Pembayaran: " + paymentId + "  Total: " + amount + "  Status: " + status;

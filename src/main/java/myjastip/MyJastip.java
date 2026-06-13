@@ -3,6 +3,7 @@ package myjastip;
 import javafx.application.Application;
 import myjastip.app.MyJastipWindow;
 import myjastip.db.DatabaseUtil;
+import myjastip.payment.Order;
 import myjastip.storage.Item;
 import myjastip.users.User;
 
@@ -20,27 +21,6 @@ VM Arguments untuk JavaFX:
 
 public class MyJastip {
 	public static void main(String[] args) throws Exception {
-
- 		try {
-			Connection connection = DatabaseUtil.getConnection();
-
-			ArrayList<Item> items = new ArrayList<>();
-			ArrayList<User> users = new ArrayList<>();
-
-			DatabaseUtil.insertItems(items, connection);
-
-			for (Item i : items) {
-				System.out.println(i.getItemDetails());
-			}
-
-			DatabaseUtil.insertUsers(users, connection);
-
-			for (User u : users) {
-				System.out.println(u.toString());
-			}
-		} catch (Exception e) {
-			System.out.println("Gagal menghubungkan Database");
-		}
 
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Apakah anda ingin membuka aplikasi JavaFX? pastikan sudah setup JavaFX! [Y] ");

@@ -12,7 +12,7 @@ public class DeliveryTracking {
         this.currentLocation = currentLocation;
     }
     
-    public void UpdateLokasi(Location currentLocation){
+    public void updateLocation(Location currentLocation){
     
     }
 
@@ -21,7 +21,7 @@ public class DeliveryTracking {
     }
     
     public void kirimLokasi() {
-        System.out.println(currentLocation.getLocation());
+        System.out.println(currentLocation.getLocationName());
     }
 }
 
