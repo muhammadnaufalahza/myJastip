@@ -29,7 +29,8 @@ public class CustomerOrdersView {
     public VBox orderHistoryMenu() {
         VBox orderBox = new VBox(12);
 
-        for (Order order : orders) {
+        for (int i = orders.size() - 1; i >= 0; i--) {
+            Order order = orders.get(i);
             HBox orderMenu = new HBox(12);
 
             Label destinationLabel = new Label("Tujuan: " + order.getLocation().getLocationName());
@@ -73,7 +74,6 @@ public class CustomerOrdersView {
             orderSpec.getChildren().addAll(destinationLabel, statusLabel, locationLabel);
             orderMenu.getChildren().addAll(orderSpec, rightControl);
             orderBox.getChildren().add(orderMenu);
-
         }
 
         return orderBox;

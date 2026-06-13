@@ -5,6 +5,7 @@ import myjastip.payment.Order;
 import myjastip.payment.Payable;
 import myjastip.payment.Payment;
 import myjastip.storage.Cart;
+import myjastip.storage.CartItem;
 import myjastip.storage.Item;
 
 import java.util.ArrayList;
@@ -17,17 +18,9 @@ public class Customer extends User implements Payable {
 	private Cart cart = new Cart();
 	private Location orderLocation = new Location();
 	private ArrayList<Payment> paymentHistory;
-	private ArrayList<Item> listItem;
-        private HashMap<String, String> orderStatus;
-        
 
 	public Customer() {
             super();
-            this.cart = new Cart();
-            this.orderLocation = new Location();
-            this.paymentHistory = new ArrayList<>();
-            this.listItem = new ArrayList<>();
-            this.orderStatus = new HashMap<>();
         }
 
 	public Customer(String userId, String name, String email, String password, String phoneNumber, String address) {
@@ -35,9 +28,7 @@ public class Customer extends User implements Payable {
 		this.address = address;
 		this.cart = new Cart();
 		this.orderLocation = new Location();
-                this.paymentHistory = new ArrayList<>();
-                this.listItem = new ArrayList<>();
-                this.orderStatus = new HashMap<>();
+        this.paymentHistory = new ArrayList<>();
 	}
 
 	@Override
@@ -64,16 +55,7 @@ public class Customer extends User implements Payable {
 
 	@Override
 	public void refund(long orderId) {
-            if (orderStatus.containsKey(String.valueOf(orderId))) {
 
-                orderStatus.put(String.valueOf(orderId),"REFUND");
-
-                System.out.println("Refund berhasil.");
-
-            } else {
-
-                System.out.println("Order tidak ditemukan.");
-            }
 	}
 
 	@Override
@@ -83,10 +65,10 @@ public class Customer extends User implements Payable {
 
 	public ArrayList<Item> searchItem(String keyword) {
             ArrayList<Item> hasilCari = new ArrayList<>();
-            for(Item item : listItem ){
-                if (item.getItemName().toLowerCase().contains(keyword.toLowerCase())) {
+            for(CartItem cartItem : cart.getCartItems()){
+                if (cartItem.getItem().getItemName().toLowerCase().contains(keyword.toLowerCase())) {
 
-                    hasilCari.add(item);
+                    hasilCari.add(cartItem.getItem());
                 }
             }
             return hasilCari;
@@ -112,49 +94,32 @@ public class Customer extends User implements Payable {
 	public void createOrder(String orderId) {
 
         if (cart == null) {
-
             System.out.println("Keranjang kosong.");
-
             return;
         }
 
-            orderStatus.put(orderId, "DIBUAT");
         }
 
         public void cancelOrder(String orderId) {
+			// nanti diimplementasi
 
-            if (orderStatus.containsKey(orderId)) {
-
-                orderStatus.put(orderId, "DIBATALKAN");
-
-        } else {
-
-                System.out.println("Order tidak ditemukan.");
-            }
         }
-        
-        public void showOrderHistory() {
 
-            for (Map.Entry<String, String> order :orderStatus.entrySet()) {
-
-                System.out.println("Order ID : " + order.getKey() + " | Status : " + order.getValue());
-            }
-        }
 
 	public void rate(Jastiper service, int value) {
-            try {
+		try {
 
-                if (value < 1 || value > 5) {
+			if (value < 1 || value > 5) {
 
-                    throw new IllegalArgumentException("Rating harus 1 - 5");
-                }
+				throw new IllegalArgumentException("Rating harus 1 - 5");
+			}
 
-                service.addRating(value);
+			service.addRating(value);
 
-            } catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 
-                System.out.println(e.getMessage());
-            }
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public String getAddress() {
@@ -167,5 +132,22 @@ public class Customer extends User implements Payable {
 
 	public void setAddress(String address) {
             this.address = address;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
+	// Jangan hapus ini pls
+	public Location getOrderLocation() {
+		return orderLocation;
+	}
+
+	public void setOrderLocation(Location orderLocation) {
+		this.orderLocation = orderLocation;
+	}
+
+	public void setPaymentHistory(ArrayList<Payment> paymentHistory) {
+		this.paymentHistory = paymentHistory;
 	}
 }
