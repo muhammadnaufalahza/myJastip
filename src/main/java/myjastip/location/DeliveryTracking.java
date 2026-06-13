@@ -1,28 +1,55 @@
 package myjastip.location;
 
-        
-public class DeliveryTracking { 
+public class DeliveryTracking {
     private String trackingId;
-    private String Status;
+    private String status;
     private Location currentLocation;
 
-    public DeliveryTracking(String trackingId, String Status, Location currentLocation) {
+    public DeliveryTracking(String trackingId, String status, Location currentLocation) {
         this.trackingId = trackingId;
-        this.Status = Status;
+        this.status = status;
         this.currentLocation = currentLocation;
     }
-    
-    public void updateLocation(Location currentLocation){
-    
+
+    public void updateLokasi(Location lokasi) {
+        try {
+            if (lokasi == null) {
+                throw new IllegalArgumentException("Lokasi tidak tersedia");
+            }
+
+            this.currentLocation = lokasi;
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
-    public void setStatus(String Status) {
-        this.Status = Status;
+    public String getStatus() {
+        return status;
     }
-    
-    public void kirimLokasi() {
-        System.out.println(currentLocation.getLocationName());
+
+    public String kirimLokasi() {
+        try {
+            if (currentLocation == null) {
+                throw new NullPointerException("Lokasi belum tersedia");
+            }
+
+            return currentLocation.toString();
+
+        } catch (NullPointerException e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    public String getTrackingId() {
+        return trackingId;
+    }
+
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
-
-
