@@ -1,5 +1,6 @@
 package myjastip.users;
 
+import myjastip.db.DatabaseUtil;
 import myjastip.payment.Order;
 import myjastip.payment.OrderStatus;
 
@@ -29,6 +30,7 @@ public class Jastiper extends User {
 //                throw new Exception("Jastiper belum terverifikasi");
 //            }
             acceptedOrders.add(order);
+            updateOrderStatus(order, OrderStatus.OUT_FOR_DELIVERY);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -39,8 +41,22 @@ public class Jastiper extends User {
 
     }
 
+    public void finishDelivery(Order order) {
+        try {
+//            if (!isVerified) {
+//                throw new Exception("Jastiper belum terverifikasi");
+//            }
+            acceptedOrders.remove(order);
+            updateOrderStatus(order, OrderStatus.DELIVERED);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void updateOrderStatus(Order order, OrderStatus status) {
         order.setOrderStatus(status);
+        DatabaseUtil.changeOrderStatus(order.getOrderId(), status);
     }
 
     public void requestVerify() {
@@ -90,4 +106,11 @@ public class Jastiper extends User {
         isVerified = verified;
     }
 
+    public ArrayList<Order> getAcceptedOrders() {
+        return acceptedOrders;
+    }
+
+    public void setAcceptedOrders(ArrayList<Order> acceptedOrders) {
+        this.acceptedOrders = acceptedOrders;
+    }
 }

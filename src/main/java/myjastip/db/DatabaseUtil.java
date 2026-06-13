@@ -196,10 +196,10 @@ public class DatabaseUtil {
 
             }
         } catch (PSQLException e) {
-            System.out.println("Error pada PSQLException pada insertOrdersById()");
+            System.out.println("Error pada PSQLException pada insertOrdersByReceiverId(): " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada insertOrdersById()");
+            System.out.println("Terjadi Error pada insertOrdersByReceiverId()" + e.getMessage());
             System.exit(0);
 
         }
@@ -289,6 +289,22 @@ public class DatabaseUtil {
         }
     }
 
+    public static void removeOrder(String orderId) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("DELETE FROM orders WHERE id = '%s'", orderId);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            int rowsDeleted = pstmt.executeUpdate();
+
+        } catch (PSQLException e) {
+            System.out.println("Error PSQLException pada removeOrder()");
+            System.exit(0);
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada removeOrder()");
+            System.exit(0);
+        }
+    }
 //    public static void insertUsers(ArrayList<User> users, Connection connection) {
 //        try {
 //            Statement statement = connection.createStatement();

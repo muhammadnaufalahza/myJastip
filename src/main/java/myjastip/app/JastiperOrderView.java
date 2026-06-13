@@ -24,6 +24,41 @@ public class JastiperOrderView {
         this.appWindow = appWindow;
     }
 
+    public VBox orderMenu() {
+        VBox orderBox = new VBox(12);
+
+        for (Order order : jastiper.getAcceptedOrders()) {
+            HBox orderMenu = new HBox(12);
+
+            Label destinationLabel = new Label("Tujuan: " + order.getLocation().getLocationName());
+            Label statusLabel = new Label("Status: " + order.getOrderStatus());
+            Label locationLabel = new Label("Lokasi: " + order.getLocation());
+
+            HBox rightControl = new HBox(12);
+            HBox.setHgrow(rightControl, Priority.ALWAYS);
+            rightControl.setAlignment(Pos.CENTER_RIGHT);
+
+            Button finishDeliveryButton = new Button("Selesaikan Pengiriman");
+
+            finishDeliveryButton.setOnAction(e -> {
+                jastiper.finishDelivery(order);
+                orderBox.getChildren().remove(orderMenu);
+                statusLabel.setText("Status: " + OrderStatus.DELIVERED);
+            });
+
+            rightControl.getChildren().add(finishDeliveryButton);
+
+            VBox orderSpec = new VBox();
+
+
+            orderSpec.getChildren().addAll(destinationLabel, statusLabel, locationLabel);
+            orderMenu.getChildren().addAll(orderSpec, rightControl);
+            orderBox.getChildren().add(orderMenu);
+        }
+        return orderBox;
+    }
+
+
     public void createJastiperOrderScene() {
         VBox layout = new VBox(20);
         layout.setPadding(new Insets(40));
@@ -32,19 +67,18 @@ public class JastiperOrderView {
         Label welcomeLabel = new Label("Pesanan Kamu");
         welcomeLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-//        ScrollPane orderHistoryScrollPane = new ScrollPane();
-//        orderHistoryScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-//        orderHistoryScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-//        orderHistoryScrollPane.setFitToWidth(true);
-//        orderHistoryScrollPane.setContent(orderHistoryMenu());
+        ScrollPane orderHistoryScrollPane = new ScrollPane();
+        orderHistoryScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        orderHistoryScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        orderHistoryScrollPane.setFitToWidth(true);
+        orderHistoryScrollPane.setContent(orderMenu());
 
         Button logoutButton = new Button("Kembali ke Dashboard");
         logoutButton.setStyle("-fx-background-color: #4067e4; -fx-text-fill: white;  -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
         logoutButton.setOnAction(e -> appWindow.showDashboardScene(jastiper));
 
-        layout.getChildren().addAll(welcomeLabel, logoutButton);
-//        layout.getChildren().addAll(welcomeLabel, orderHistoryScrollPane, logoutButton);
+        layout.getChildren().addAll(welcomeLabel, orderHistoryScrollPane, logoutButton);
         jastiperOrderScene = new Scene(layout, 1200, 800);
     }
 
@@ -53,8 +87,7 @@ public class JastiperOrderView {
         return jastiperOrderScene;
     }
 
-    public void setCustomer(Jastiper jastiper) {
+    public void setJastiper(Jastiper jastiper) {
         this.jastiper = jastiper;
     }
-
 }

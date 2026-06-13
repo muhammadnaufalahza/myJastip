@@ -26,9 +26,8 @@ public class CustomerOrdersView {
     }
     public VBox orderHistoryMenu() {
         VBox orderBox = new VBox(12);
-
-        for (int i = customer.getOrders().size() - 1; i >= 0; i--) {
-            Order order = customer.getOrders().get(i);
+        DatabaseUtil.insertOrdersByReceiverId(customer.getOrders(), customer.getUserId());
+        for (Order order : customer.getOrders()) {
             HBox orderMenu = new HBox(12);
 
             Label destinationLabel = new Label("Tujuan: " + order.getLocation().getLocationName());
@@ -40,9 +39,9 @@ public class CustomerOrdersView {
             rightControl.setAlignment(Pos.CENTER_RIGHT);
 
             Button cancelOrderButton = new Button("Batalkan Pesanan");
-            if (order.getOrderStatus() == OrderStatus.DELIVERED || order.getOrderStatus() == OrderStatus.CONFIRMED || order.getOrderStatus() == OrderStatus.CANCELLED) {
-                cancelOrderButton.setDisable(true);
-            }
+//            if (order.getOrderStatus() == OrderStatus.DELIVERED || order.getOrderStatus() == OrderStatus.CONFIRMED || order.getOrderStatus() == OrderStatus.CANCELLED) {
+//                cancelOrderButton.setDisable(true);
+//            }
             cancelOrderButton.setOnAction(e -> {
                 customer.cancelOrder(order);
                 cancelOrderButton.setDisable(true);
@@ -55,11 +54,8 @@ public class CustomerOrdersView {
                 finishOrderButton.setDisable(true);
             }
             finishOrderButton.setOnAction(e -> {
-                DatabaseUtil.changeOrderStatus(order.getOrderId(), OrderStatus.CONFIRMED);
-                order.setOrderStatus(OrderStatus.CONFIRMED);
-                cancelOrderButton.setDisable(true);
-                DatabaseUtil.insertOrdersByReceiverId(customer.getOrders(), customer.getUserId());
-                statusLabel.setText("Status: " + OrderStatus.CONFIRMED);
+                orderBox.getChildren().remove(orderMenu);
+                customer.completeOrder(order);
             });
 
 
@@ -106,7 +102,6 @@ public class CustomerOrdersView {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-        DatabaseUtil.insertOrdersByReceiverId(customer.getOrders(), customer.getUserId());
     }
 
 }

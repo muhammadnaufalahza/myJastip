@@ -118,6 +118,12 @@ public class Customer extends User implements Payable {
 //			DatabaseUtil.insertOrdersByReceiverId(orders, this.getUserId());
 	}
 
+	public void completeOrder(Order order) {
+		// jangan ubah ini
+		DatabaseUtil.removeOrder(order.getOrderId());
+//			DatabaseUtil.insertOrdersByReceiverId(orders, this.getUserId());
+	}
+
 
 	public void rate(Jastiper service, int value) {
 		try {
