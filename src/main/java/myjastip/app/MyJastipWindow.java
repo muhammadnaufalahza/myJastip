@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import myjastip.users.Customer;
+import myjastip.users.Jastiper;
 import myjastip.users.User;
 
 public class MyJastipWindow extends Application {
@@ -14,6 +15,7 @@ public class MyJastipWindow extends Application {
     private DashboardView dashboardView;
     private StoreView storeView;
     private CustomerOrdersView customerOrdersView;
+    private JastiperOrderView jastiperOrderView;
 
     @Override
     public void start(Stage stage) {
@@ -27,6 +29,7 @@ public class MyJastipWindow extends Application {
         this.dashboardView = new DashboardView(this);
         this.storeView = new StoreView(this);
         this.customerOrdersView = new CustomerOrdersView(this);
+        this.jastiperOrderView = new JastiperOrderView(this);
 
         showLoginScene();
         this.primaryStage.show();
@@ -53,6 +56,11 @@ public class MyJastipWindow extends Application {
     public void showCustomerOrdersScene(Customer customer) {
         customerOrdersView.setCustomer(customer);
         primaryStage.setScene(customerOrdersView.getCustomerOrdersScene());
+    }
+
+    public void showJastiperOrderScene(Jastiper jastiper) {
+        jastiperOrderView.setJastiper(jastiper);
+        primaryStage.setScene(jastiperOrderView.getCustomerOrdersScene());
     }
 
 }

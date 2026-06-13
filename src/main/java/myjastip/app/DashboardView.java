@@ -15,6 +15,7 @@ import myjastip.payment.Order;
 import myjastip.payment.OrderStatus;
 import myjastip.storage.CartItem;
 import myjastip.users.Customer;
+import myjastip.users.Jastiper;
 import myjastip.users.User;
 
 import java.util.ArrayList;
@@ -86,8 +87,11 @@ public class DashboardView {
             rightControl.setAlignment(Pos.CENTER_RIGHT);
 
             Button acceptButton = new Button("Terima Pesanan");
-            acceptButton.setOnAction(e -> orderBox.getChildren().remove(orderMenu));
-
+            acceptButton.setOnAction(e -> {
+                Jastiper jastiper = (Jastiper) user;
+                orderBox.getChildren().remove(orderMenu);
+                jastiper.acceptOrder(order);
+            });
             rightControl.getChildren().add(acceptButton);
 
             VBox orderSpec = new VBox();
@@ -155,7 +159,13 @@ public class DashboardView {
             orderScrollPane.setFitToWidth(true);
             orderScrollPane.setContent(orderMenu());
 
-            layout.getChildren().addAll(welcomeLabel, userTypeLabel, infoLabel, orderScrollPane, logoutButton);
+            Button acceptedOrdersButton = new Button("Lihat Pesanan yang diterima");
+            acceptedOrdersButton.setStyle("-fx-background-color: #80BEFF; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px;");
+            acceptedOrdersButton.setOnAction(e -> {
+                appWindow.showJastiperOrderScene((Jastiper) user);
+            });
+
+            layout.getChildren().addAll(welcomeLabel, userTypeLabel, infoLabel, acceptedOrdersButton, orderScrollPane, logoutButton);
         }
         dashboardScene = new Scene(layout, 1200, 800);
     }

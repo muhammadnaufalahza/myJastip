@@ -196,14 +196,51 @@ public class DatabaseUtil {
 
             }
         } catch (PSQLException e) {
-            System.out.println("Error pada PSQLException pada insertOrdersById()");
+            System.out.println("Error pada PSQLException pada insertOrdersByReceiverId()\n" + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada insertOrdersById()");
+            System.out.println("Terjadi Error pada insertOrdersByReceiverId()\n" + e.getMessage());
             System.exit(0);
 
         }
     }
+    public static void insertOrdersByJastiperId(ArrayList<Order> orders, String userId) {
+        orders.clear();
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("SELECT * FROM orders WHERE jastiper_id = '%s'", userId);
+
+            var resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                String orderId = resultSet.getString("id");
+                String orderStatus = resultSet.getString("status");
+                String locationName = resultSet.getString("location_name");
+                double locationLatitude = resultSet.getDouble("location_latitude");
+                double locationLongitude = resultSet.getDouble("location_longitude");
+                double totalItemPrice = resultSet.getDouble("total_item_price");
+                double transportationFee = resultSet.getDouble("total_item_price");
+                double serviceFee = resultSet.getDouble("service_fee");
+                String rawOrderItems = resultSet.getString("order_items");
+                String receiverId = resultSet.getString("receiver_id");
+                String jastiperId = resultSet.getString("jastiper_id");
+
+                Gson orderGson = new Gson();
+                Cart cart = orderGson.fromJson(rawOrderItems, Cart.class);
+
+                orders.add(new Order(orderId, OrderStatus.valueOf(orderStatus), new Location(locationName, locationLatitude, locationLongitude), totalItemPrice, transportationFee, serviceFee, receiverId, cart, jastiperId));
+
+            }
+        } catch (PSQLException e) {
+            System.out.println("Error pada PSQLException pada insertOrdersByJastiperId()\n" + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada insertOrdersByJastiperId()\n" + e.getMessage());
+            System.exit(0);
+
+        }
+    }
+
 
     public static Order getOrderByReceiverId(String userId) {
         if (userId == null) return new Order();
@@ -238,6 +275,8 @@ public class DatabaseUtil {
         }
         return new Order();
     }
+
+
     public static Order getOrder(String orderId) {
         if (orderId == null) return new Order();
         try {
@@ -289,6 +328,40 @@ public class DatabaseUtil {
         }
     }
 
+    public static void addJastiperId(String orderId, String userId) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("UPDATE orders SET jastiper_id = '%s' WHERE id = '%s'", userId, orderId);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            int rowsInserted = pstmt.executeUpdate();
+
+
+        } catch (PSQLException e) {
+            System.out.println("Error PSQLException pada changeOrderStatus()");
+            System.exit(0);
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada changeOrderStatus()");
+            System.exit(0);
+        }
+    }
+
+    public static void removeOrder(String orderId) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("DELETE FROM orders WHERE id = '%s'", orderId);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            int rowsDeleted = pstmt.executeUpdate();
+
+        } catch (PSQLException e) {
+            System.out.println("Error PSQLException pada removeOrder()");
+            System.exit(0);
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada removeOrder()");
+            System.exit(0);
+        }
+    }
 //    public static void insertUsers(ArrayList<User> users, Connection connection) {
 //        try {
 //            Statement statement = connection.createStatement();

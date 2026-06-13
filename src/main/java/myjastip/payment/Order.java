@@ -13,6 +13,7 @@ public class Order {
 	private double transportationFee;
 	private double serviceFee;
 	private String receiverId;
+	private String jastiperId;
 
 	private double totalBill;
 	private Cart orderedCart;
@@ -30,6 +31,20 @@ public class Order {
 		this.serviceFee = serviceFee;
 		this.receiverId = receiverId;
 		this.orderedCart = orderedCart;
+	}
+
+	// ini overloading method
+	public Order(String orderId, OrderStatus orderStatus, Location location, double totalItemPrice, double transportationFee, double serviceFee, String receiverId, Cart orderedCart, String jastiperId) {
+		this.orderId = orderId;
+		this.orderStatus = orderStatus;
+		this.location = location;
+		this.totalItemPrice = totalItemPrice;
+		this.transportationFee = transportationFee;
+		this.serviceFee = serviceFee;
+		this.receiverId = receiverId;
+		this.orderedCart = orderedCart;
+		this.jastiperId = jastiperId;
+
 	}
 
 	public double calculateTotalBill() {
