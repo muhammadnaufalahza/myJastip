@@ -14,7 +14,7 @@ import myjastip.location.Location;
 import myjastip.payment.EmptyOrderException;
 import myjastip.payment.Order;
 import myjastip.payment.OrderStatus;
-import myjastip.payment.Payment;
+import myjastip.payment.EscrowPayment;
 import myjastip.storage.CartItem;
 import myjastip.users.Customer;
 import myjastip.users.Jastiper;
@@ -219,7 +219,7 @@ public class DashboardView {
                     ((VBox) storeScrollPane.getContent()).getChildren().clear();
 
                     UUID uuid = UUID.randomUUID();
-                    Payment payment = new Payment(uuid.toString(), order.getOrderId(), order.getTotalBill());
+                    EscrowPayment payment = new EscrowPayment(uuid.toString(), order.getOrderId(), order.getTotalBill());
                     DatabaseUtil.insertPayment(payment);
                     appWindow.showPaymentScene(customer, payment);
                 } catch (EmptyOrderException ex) {

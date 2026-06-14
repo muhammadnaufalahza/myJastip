@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import myjastip.location.Location;
 import myjastip.payment.Order;
 import myjastip.payment.OrderStatus;
-import myjastip.payment.Payment;
+import myjastip.payment.EscrowPayment;
 import myjastip.payment.PaymentStatus;
 import myjastip.storage.Cart;
 import myjastip.storage.Item;
@@ -58,14 +58,14 @@ public class DatabaseUtil {
             String userEmail = resultSet.getString("email");
             String userPassword = resultSet.getString("password");
             String userPhoneNumber = resultSet.getString("phone_number");
-            String userAddress = resultSet.getString("address");
+//            String userAddress = resultSet.getString("address");
             boolean isJastiper = resultSet.getBoolean("is_jastiper");
             double balance = resultSet.getDouble("balance");
 
             if (isJastiper) {
                 return new Jastiper(userId, userName, userEmail, userPassword, userPhoneNumber, balance, new ArrayList<>());
             } else {
-                return new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, balance, userAddress, new Cart(), new Location(), new ArrayList<>(), new ArrayList<>());
+                return new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, balance, new Cart(), new Location(), new ArrayList<>(), new ArrayList<>());
             }
 
         } catch (PSQLException e) {
@@ -387,7 +387,7 @@ public class DatabaseUtil {
         }
     }
 
-    public static void insertPayment(Payment payment) {
+    public static void insertPayment(EscrowPayment payment) {
 //        String orderId, PaymentStatus status, double amount
         try {
             Connection connection = getConnection();

@@ -12,20 +12,18 @@ import java.util.UUID;
 import java.util.ArrayList;
 
 public class Customer extends User implements Payable {
-	private String address;
 
 	private Cart cart;
 	private Location orderLocation;
-	private ArrayList<Payment> paymentHistory;
+	private ArrayList<EscrowPayment> paymentHistory;
 	private ArrayList<Order> orders;
 
 	public Customer() {
 		super();
 	}
 
-	public Customer(String userId, String name, String email, String password, String phoneNumber, double balance, String address, Cart cart, Location orderLocation, ArrayList<Payment> paymentHistory, ArrayList<Order> orders) {
+	public Customer(String userId, String name, String email, String password, String phoneNumber, double balance, Cart cart, Location orderLocation, ArrayList<EscrowPayment> paymentHistory, ArrayList<Order> orders) {
 		super(userId, name, email, password, phoneNumber, balance);
-		this.address = address;
 		this.cart = cart;
 		this.orderLocation = orderLocation;
 		this.paymentHistory = paymentHistory;
@@ -33,7 +31,7 @@ public class Customer extends User implements Payable {
 	}
 
 	@Override
-	public void pay(Payment payment) throws InsufficientBalanceException {
+	public void pay(EscrowPayment payment) throws InsufficientBalanceException {
 		if (balance < payment.getAmount()) {
 			throw new InsufficientBalanceException("Saldo anda belum cukup untuk membayar pembayaran ini!");
 		}
@@ -51,7 +49,7 @@ public class Customer extends User implements Payable {
 	}
 
 	@Override
-	public ArrayList<Payment> getPaymentHistory() {
+	public ArrayList<EscrowPayment> getPaymentHistory() {
 		return paymentHistory;
 	}
 
@@ -125,16 +123,9 @@ public class Customer extends User implements Payable {
 		}
 	}
 
-	public String getAddress() {
-		return address;
-	}
 
 	public Cart getCart() {
 		return cart;
-	}
-
-	public void setAddress(String address) {
-            this.address = address;
 	}
 
 	public void setCart(Cart cart) {
@@ -149,7 +140,7 @@ public class Customer extends User implements Payable {
 		this.orderLocation = orderLocation;
 	}
 
-	public void setPaymentHistory(ArrayList<Payment> paymentHistory) {
+	public void setPaymentHistory(ArrayList<EscrowPayment> paymentHistory) {
 		this.paymentHistory = paymentHistory;
 	}
 

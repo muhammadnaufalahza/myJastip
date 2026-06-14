@@ -39,7 +39,7 @@ public class CustomerOrdersView {
             rightControl.setAlignment(Pos.CENTER_RIGHT);
 
             Button cancelOrderButton = new Button("Batalkan Pesanan");
-            if (order.getOrderStatus() == OrderStatus.DELIVERED || order.getOrderStatus() == OrderStatus.CANCELLED) {
+            if (order.getOrderStatus() == OrderStatus.COMPLETED || order.getOrderStatus() == OrderStatus.DELIVERED || order.getOrderStatus() == OrderStatus.CANCELLED) {
                 cancelOrderButton.setDisable(true);
             }
             cancelOrderButton.setOnAction(e -> {

@@ -2,7 +2,7 @@ package myjastip.app;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import myjastip.payment.Payment;
+import myjastip.payment.EscrowPayment;
 import myjastip.users.Customer;
 import myjastip.users.Jastiper;
 import myjastip.users.User;
@@ -64,7 +64,7 @@ public class MyJastipWindow extends Application {
         primaryStage.setScene(jastiperOrderView.getJastiperOrderScene());
     }
 
-    public void showPaymentScene(Customer customer, Payment payment) {
+    public void showPaymentScene(Customer customer, EscrowPayment payment) {
         paymentView.setCustomer(customer);
         paymentView.setPayment(payment);
         primaryStage.setScene(paymentView.getPaymentScene());

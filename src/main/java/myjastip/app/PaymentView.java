@@ -7,14 +7,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import myjastip.payment.InsufficientBalanceException;
-import myjastip.payment.Payment;
+import myjastip.payment.EscrowPayment;
 import myjastip.users.Customer;
 
 public class PaymentView {
     private final MyJastipWindow appWindow;
     private Scene paymentScene;
     private Customer customer;
-    private Payment payment;
+    private EscrowPayment payment;
 
     public PaymentView(MyJastipWindow appWindow) {
         this.appWindow = appWindow;
@@ -55,7 +55,7 @@ public class PaymentView {
         this.customer = customer;
     }
 
-    public void setPayment(Payment payment) {
+    public void setPayment(EscrowPayment payment) {
         this.payment = payment;
     }
 
