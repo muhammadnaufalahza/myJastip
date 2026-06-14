@@ -38,9 +38,14 @@ public class JastiperOrderView {
 
             Button finishDeliveryButton = new Button("Selesaikan Pengiriman");
 
+            if (order.getOrderStatus() == OrderStatus.DELIVERED) {
+                finishDeliveryButton.setDisable(true);
+            }
+
             finishDeliveryButton.setOnAction(e -> {
                 jastiper.finishDelivery(order);
-                orderBox.getChildren().remove(orderMenu);
+                finishDeliveryButton.setDisable(true);
+//                orderBox.getChildren().remove(orderMenu);
                 statusLabel.setText("Status: " + OrderStatus.DELIVERED);
             });
 

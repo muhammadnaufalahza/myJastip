@@ -5,8 +5,8 @@ import java.time.Instant;
 public class Escrow extends Payment {
     private String transactionId;
 
-    public Escrow(String orderId, double amount, String transactionId) {
-        super(orderId, amount);
+    public Escrow(String paymentId, String orderId, double amount, String transactionId) {
+        super(paymentId, orderId, amount);
         this.transactionId = transactionId;
     }
 

@@ -1,5 +1,8 @@
 package myjastip.payment;
 
+import myjastip.db.DatabaseUtil;
+import myjastip.users.User;
+
 import java.time.Instant;
 
 public class Payment {
@@ -9,7 +12,8 @@ public class Payment {
     protected PaymentStatus status;
     protected String updatedAt;
 
-    public Payment(String orderId, double amount) {
+    public Payment(String paymentId, String orderId, double amount) {
+        this.paymentId = paymentId;
         this.orderId = orderId;
         this.amount = amount;
         this.status = PaymentStatus.UNFINISHED;
@@ -24,7 +28,11 @@ public class Payment {
     }
 
     public void processPayment(double amount) {
-
+        Order order = DatabaseUtil.getOrder(orderId);
+        User user = DatabaseUtil.getUser(order.getReceiverId());
+        DatabaseUtil.changeUserBalance(user.getUserId(), user.getBalance() - amount);
+        DatabaseUtil.changePaymentStatus(paymentId, PaymentStatus.HELD);
+        user.setBalance(user.getBalance() - amount);
         System.out.println("Pembayaran sebesar " + amount + " berhasil diproses.");
     }
 

@@ -38,6 +38,7 @@ public class Customer extends User implements Payable {
 			throw new InsufficientBalanceException("Saldo anda belum cukup untuk membayar pembayaran ini!");
 		}
 
+
 		payment.processPayment(payment.getAmount());
 		paymentHistory.add(payment);
 		System.out.println("Pembayaran berhasil.");

@@ -21,6 +21,7 @@ import myjastip.users.Jastiper;
 import myjastip.users.User;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class DashboardView {
 
@@ -144,7 +145,10 @@ public class DashboardView {
                 try {
                     Order order = customer.createOrder();
                     ((VBox) storeScrollPane.getContent()).getChildren().clear();
-                    Payment payment = new Payment(order.getOrderId(), order.getTotalItemPrice());
+
+                    UUID uuid = UUID.randomUUID();
+                    Payment payment = new Payment(uuid.toString(), order.getOrderId(), order.getTotalBill());
+                    DatabaseUtil.insertPayment(payment);
                     appWindow.showPaymentScene(customer, payment);
                 } catch (EmptyOrderException ex) {
                     System.out.println("Error: " + ex.getMessage());

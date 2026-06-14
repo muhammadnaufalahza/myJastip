@@ -47,10 +47,6 @@ public class PaymentView {
             }
         });
 
-//        Button backButton = new Button("Kembali");
-//        backButton.setStyle("-fx-background-color: #4067e4; -fx-text-fill: white;  -fx-background-radius: 20px; -fx-border-radius: 20px;");
-//        backButton.setOnAction(e -> appWindow.showDashboardScene(customer));
-
         layout.getChildren().addAll(titleLabel, paymentBox, payButton);
         paymentScene = new Scene(layout, 600, 400);
     }

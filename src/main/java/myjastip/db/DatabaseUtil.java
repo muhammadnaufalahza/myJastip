@@ -78,6 +78,27 @@ public class DatabaseUtil {
         return new Customer();
     }
 
+    public static void changeUserBalance(String userId, double newBalance) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("UPDATE users SET balance = %f WHERE id = '%s'", newBalance, userId);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.executeUpdate();
+
+
+        } catch (PSQLException e) {
+            System.out.println("Error PSQLException pada changeUserBalance()");
+            System.exit(0);
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada changeUserBalance()");
+            System.exit(0);
+        }
+    }
+
+
+
+
     public static void insertItems(ArrayList<Item> items) {
         items.clear();
         try {
@@ -250,7 +271,7 @@ public class DatabaseUtil {
         try {
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
-            String query = String.format("SELECT * FROM order WHERE receiver_id = '%s'", userId);
+            String query = String.format("SELECT * FROM orders WHERE receiver_id = '%s'", userId);
             var resultSet = statement.executeQuery(query);
             resultSet.next();
             String orderId = resultSet.getString("id");
@@ -270,10 +291,10 @@ public class DatabaseUtil {
             return new Order(orderId, OrderStatus.valueOf(orderStatus), new Location(locationName, locationLatitude, locationLongitude), totalItemPrice, transportationFee, serviceFee, userId, cart);
 
         } catch (PSQLException e) {
-            System.out.println("Error PSQLException pada getOrder()");
+            System.out.println("Error PSQLException pada getOrderByReceiverId(); " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada getOrder()");
+            System.out.println("Terjadi Error pada getOrderByReceiverId(); " + e.getMessage());
             System.exit(0);
         }
         return new Order();
@@ -285,7 +306,7 @@ public class DatabaseUtil {
         try {
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
-            String query = String.format("SELECT * FROM order WHERE id = '%s'", orderId);
+            String query = String.format("SELECT * FROM orders WHERE id = '%s'", orderId);
             var resultSet = statement.executeQuery(query);
             resultSet.next();
             String orderStatus = resultSet.getString("status");
@@ -304,10 +325,10 @@ public class DatabaseUtil {
             return new Order(orderId, OrderStatus.valueOf(orderStatus), new Location(locationName, locationLatitude, locationLongitude), totalItemPrice, transportationFee, serviceFee, receiverId, cart);
 
         } catch (PSQLException e) {
-            System.out.println("Error PSQLException pada getOrder()");
+            System.out.println("Error PSQLException pada getOrder(): " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada getOrder()");
+            System.out.println("Terjadi Error pada getOrder(): " + e.getMessage());
             System.exit(0);
         }
         return new Order();
@@ -366,22 +387,42 @@ public class DatabaseUtil {
         }
     }
 
-    public static void insertPayment(String orderId, PaymentStatus status, double amount) {
+    public static void insertPayment(Payment payment) {
+//        String orderId, PaymentStatus status, double amount
         try {
             Connection connection = getConnection();
 
             Instant now = Instant.now();
+            Timestamp timestamp = Timestamp.from(now);
 
-            String query = String.format("INSERT INTO payments (order_id, status, amount, updates_at) VALUES ('%s', '%s', %f, ?);", orderId, status, amount);
+            String query = String.format("INSERT INTO payments (id, order_id, status, amount, updates_at) VALUES ('%s', '%s', '%s', %f, ?);", payment.getPaymentId(), payment.getOrderId(), payment.getStatus(), payment.getAmount());
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setObject(4, now);
+            pstmt.setObject(1, timestamp);
             pstmt.executeUpdate();
 
         } catch (PSQLException e) {
-            System.out.println("Error pada PSQLException pada insertPayment()");
+            System.out.println("Error pada PSQLException pada insertPayment(): " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada insertPayment()");
+            System.out.println("Terjadi Error pada insertPayment(): " + e.getMessage());
+            System.exit(0);
+        }
+    }
+
+    public static void changePaymentStatus(String paymentId, PaymentStatus status) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("UPDATE payments SET status = '%s' WHERE id = '%s'", status, paymentId);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            int rowsInserted = pstmt.executeUpdate();
+
+
+        } catch (PSQLException e) {
+            System.out.println("Error PSQLException pada changePaymentStatus(): " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada changePaymentStatus(): " + e.getMessage());
             System.exit(0);
         }
     }
