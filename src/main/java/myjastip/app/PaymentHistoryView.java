@@ -71,12 +71,12 @@ public class PaymentHistoryView {
         paymentHistoryScrollPane.setFitToWidth(true);
         paymentHistoryScrollPane.setContent(paymentHistoryMenu());
 
-        Button logoutButton = new Button("Kembali ke Dashboard");
-        logoutButton.setStyle("-fx-background-color: #4067e4; -fx-text-fill: white;  -fx-background-radius: 20px; -fx-border-radius: 20px;");
+        Button backButton = new Button("Kembali ke Dashboard");
+        backButton.setStyle("-fx-background-color: #4067e4; -fx-text-fill: white;  -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
-        logoutButton.setOnAction(e -> appWindow.showDashboardScene(customer));
+        backButton.setOnAction(e -> appWindow.showDashboardScene(customer));
 
-        layout.getChildren().addAll(welcomeLabel, paymentHistoryScrollPane, logoutButton);
+        layout.getChildren().addAll(welcomeLabel, paymentHistoryScrollPane, backButton);
         paymentHistoryScene = new Scene(layout, 1200, 800);
     }
 

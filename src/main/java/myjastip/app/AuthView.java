@@ -46,17 +46,22 @@ public class AuthView {
             String name = usernameInput.getText();
             String pass = passwordInput.getText();
 
-            if (!(name.isEmpty() || pass.isEmpty())) {
-                String userId = DatabaseUtil.getUserId(name, pass);
-                User user = DatabaseUtil.getUser(userId);
-                if (user != null) {
-                    appWindow.showDashboardScene(user);
+            try {
+                if (!(name.isEmpty() || pass.isEmpty())) {
+                    String userId = DatabaseUtil.getUserId(name, pass);
+                    User user = DatabaseUtil.getUser(userId);
+                    if (user != null) {
+                        appWindow.showDashboardScene(user);
+                    } else {
+                        throw new UserNotFoundException("User atau Password Salah!");
+                    }
                 } else {
-                    System.out.println("User atau Password Salah!");
+                    throw new InvalidAuthException("Isi Username dan Password!");
                 }
-            } else {
-                System.out.println("Isi User dan password");
+            } catch (InvalidAuthException | UserNotFoundException ex) {
+                System.out.println("Error: " + ex.getMessage());
             }
+
         });
 
         layout.getChildren().addAll(titleLabel, usernameInput, passwordInput, loginButton, registerLink);
@@ -87,7 +92,7 @@ public class AuthView {
         registerButton.setOnAction(e -> appWindow.showLoginScene());
 
         layout.getChildren().addAll(titleLabel, usernameInput, passwordInput, registerButton, loginLink);
-        registerScene = new Scene(layout, 1200, 800);
+        registerScene = new Scene(layout, 600, 400);
     }
 
     public Scene getLoginScene() {

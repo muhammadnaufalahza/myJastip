@@ -2,7 +2,6 @@ package myjastip.app;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -23,7 +22,6 @@ import myjastip.users.User;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
@@ -186,7 +184,8 @@ public class DashboardView {
 
 //        Label infoLabel = new Label("Ini adalah halaman Dashboard Utama.");
 
-        Label balanceLabel = new Label("Saldo: Rp." + new BigDecimal(String.valueOf(user.getBalance())).toPlainString());
+        Label balanceLabel = new Label();
+        balanceLabel.setText("Saldo: Rp." + new BigDecimal(String.valueOf(user.getBalance())).toPlainString());
 
         Button logoutButton = new Button("Logout");
         logoutButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-background-radius: 20px; -fx-border-radius: 20px;");
@@ -283,10 +282,8 @@ public class DashboardView {
                 try {
                     if (!(inputAddress.getText().isEmpty() || inputLatitude.getText().isEmpty() || inputLongitude.getText().isEmpty())) {
                         customer.setOrderLocation(new Location(inputAddress.getText(), Double.parseDouble(inputLatitude.getText()), Double.parseDouble(inputLatitude.getText())));
-                    } else if (!inputAddress.getText().isEmpty()) {
-                        customer.setOrderLocation(new Location(inputAddress.getText()));
                     } else {
-                        customer.setOrderLocation(new Location());
+                        throw new InvalidAddressException("Isi Alamat dengan Lengkap!");
                     }
                     Order order = customer.createOrder();
                     ((GridPane) storeScrollPane.getContent()).getChildren().clear();
@@ -295,7 +292,7 @@ public class DashboardView {
                     EscrowPayment payment = new EscrowPayment(uuid.toString(), order.getOrderId(), order.getTotalBill());
                     DatabaseUtil.insertPayment(payment);
                     appWindow.showPaymentScene(customer, payment);
-                } catch (EmptyOrderException ex) {
+                } catch (EmptyOrderException | InvalidAddressException ex) {
                     System.out.println("Error: " + ex.getMessage());
                 }
 

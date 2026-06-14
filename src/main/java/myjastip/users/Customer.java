@@ -30,11 +30,10 @@ public class Customer extends User implements Payable {
 	public void pay(EscrowPayment payment) throws InsufficientBalanceException {
 		if (balance < payment.getAmount()) {
 			throw new InsufficientBalanceException("Saldo anda belum cukup untuk membayar pembayaran ini!");
+		} else {
+			payment.processPayment(payment.getAmount());
+			System.out.println("Pembayaran berhasil.");
 		}
-
-		payment.processPayment(payment.getAmount());
-		System.out.println("Pembayaran berhasil.");
-
 	}
 
 	@Override

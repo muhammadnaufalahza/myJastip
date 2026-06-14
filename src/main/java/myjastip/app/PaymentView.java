@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import myjastip.db.DatabaseUtil;
 import myjastip.payment.InsufficientBalanceException;
 import myjastip.payment.EscrowPayment;
 import myjastip.users.Customer;
@@ -43,7 +44,7 @@ public class PaymentView {
             } catch (InsufficientBalanceException ex) {
                 System.out.println("Error : " + ex.getMessage());
             } finally {
-                appWindow.showDashboardScene(customer);
+                appWindow.showDashboardScene(DatabaseUtil.getUser(customer.getUserId()));
             }
         });
 

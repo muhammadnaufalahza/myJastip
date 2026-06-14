@@ -7,15 +7,10 @@ public class Location {
     private double longitude;
 
     public Location() {
-        Random rand = new Random();
-        this.latitude = -90 + rand.nextFloat() * 180;
-        this.longitude = -180 + rand.nextFloat() * 360;
-        this.locationName = "Unnamed Location";
-    }
-
-    public Location(String location) {
-        this();
-        this.locationName = location;
+//        Random rand = new Random();
+//        this.latitude = -90 + rand.nextFloat() * 180;
+//        this.longitude = -180 + rand.nextFloat() * 360;
+//        this.locationName = "Unnamed Location";
     }
 
     public Location(String location, double latitude, double longitude) {
