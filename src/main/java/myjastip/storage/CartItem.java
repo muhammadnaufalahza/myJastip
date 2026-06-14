@@ -6,8 +6,9 @@ public class CartItem {
 
 	public CartItem(Item item, int quantity) {
 		this.item = item;
-		this.quantity = quantity;
+		this.quantity = quantity;;
 	}
+
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
@@ -29,11 +30,11 @@ public class CartItem {
 		return quantity;
 	}
 
-	public void addQuanitity(int qty) {
+	public void addQuantity(int qty) {
 		this.quantity += qty;
 	}
 
-	public void subtractQuanitity(int qty) {
+	public void subtractQuantity(int qty) {
 		this.quantity -= qty;
 	}
 

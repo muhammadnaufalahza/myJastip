@@ -15,7 +15,6 @@ import org.postgresql.util.PSQLException;
 
 import java.sql.*;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,6 +22,23 @@ public class DatabaseUtil {
     public static Connection getConnection() throws SQLException {
         String URL = "jdbc:postgresql://aws-1-ap-south-1.pooler.supabase.com:6543/postgres?user=postgres.stmeucoddhqzfblbtrne&password=" + System.getenv("SUPABASE_DB_PASSWORD");
         return DriverManager.getConnection(URL);
+    }
+
+    public static void insertUser(User user) {
+        try {
+            Connection connection = getConnection();
+
+            String query = String.format("INSERT INTO users (id, name, email, password, phone_number, is_jastiper, balance) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %f);", user.getUserId(), user.getName(), user.getEmail(), user.getPassword(), user.getPhoneNumber(), user instanceof Jastiper , user.getBalance());
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.executeUpdate();
+
+        } catch (PSQLException e) {
+            System.out.println("Error pada PSQLException pada insertUser(): " + e.getMessage());
+            System.exit(0);
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada insertUser(): " + e.getMessage());
+            System.exit(0);
+        }
     }
 
     public static String getUserId(String name, String pass) {

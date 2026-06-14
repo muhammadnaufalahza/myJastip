@@ -88,7 +88,7 @@ public class DashboardView {
             itemQtySub.setStyle("-fx-background-color: white; -fx-border-color: red; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
             itemQtyAdd.setOnAction(e -> {
-                cartItem.addQuanitity(1);
+                cartItem.addQuantity(1);
                 itemQtyLabel.setText(String.format("%d", cartItem.getQuantity()));
                 itemSubTotalLabel.setText(String.format("%.2f",  cartItem.getSubTotal()));
                 totalPriceLabel.setText(String.format("%.2f", ((Customer) user).getCart().calculateTotalPrice()));
@@ -99,7 +99,7 @@ public class DashboardView {
             });
             itemQtySub.setOnAction(e -> {
                 if (cartItem.getQuantity() > 1) {
-                    cartItem.subtractQuanitity(1);
+                    cartItem.subtractQuantity(1);
                     itemQtyLabel.setText(String.format("%d", cartItem.getQuantity()));
                     itemSubTotalLabel.setText(String.format("%.2f",  cartItem.getSubTotal()));
                 } else {

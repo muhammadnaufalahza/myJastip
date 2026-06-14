@@ -14,6 +14,12 @@ public class Jastiper extends User {
     private boolean isVerified;
     private ArrayList<Order> acceptedOrders;
 
+    public Jastiper(String userId, String name, String email, String password, String phoneNumber, double balance) {
+        super(userId, name, email, password, phoneNumber, balance);
+        this.isVerified = false;
+        this.acceptedOrders = new ArrayList<>();
+    }
+
     public Jastiper(String userId, String name, String email, String password, String phoneNumber, double balance, ArrayList<Order> acceptedOrders) {
         super(userId, name, email, password, phoneNumber, balance);
         this.isVerified = false;
@@ -27,10 +33,6 @@ public class Jastiper extends User {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public void rejectOrder(Order order) {
-
     }
 
     public void finishDelivery(Order order) {
@@ -75,12 +77,6 @@ public class Jastiper extends User {
         for (Order order : acceptedOrders) {
             System.out.println(order);
         }
-    }
-
-    public void showOrderStatus() {
-//        for (Map.Entry<String, String> order :orderStatus.entrySet()) {
-//            System.out.println("Order ID : " + order.getKey() + " | Status : " + order.getValue());
-//        }
     }
 
     public double getRating() {

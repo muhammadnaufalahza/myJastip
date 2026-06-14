@@ -1,6 +1,7 @@
 package myjastip.storage;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class Cart {
 	private ArrayList<CartItem> cartItems = new ArrayList<>();
@@ -21,10 +22,9 @@ public class Cart {
 		for (CartItem c : cartItems) {
 			total += c.getSubTotal();
 		}
+
 		return total;
 	}
-
-
 
 	public void emptyCart() {
 		cartItems.clear();

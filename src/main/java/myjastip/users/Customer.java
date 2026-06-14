@@ -18,6 +18,14 @@ public class Customer extends User implements Payable {
 	private ArrayList<EscrowPayment> paymentHistory;
 	private ArrayList<Order> orders;
 
+	public Customer(String userId, String name, String email, String password, String phoneNumber, double balance) {
+		super(userId, name, email, password, phoneNumber, balance);
+		this.cart = new Cart();
+		this.orderLocation = new Location();
+		this.paymentHistory = new ArrayList<>();
+		this.orders = new ArrayList<>();
+	}
+
 	public Customer(String userId, String name, String email, String password, String phoneNumber, double balance, Cart cart, Location orderLocation, ArrayList<EscrowPayment> paymentHistory, ArrayList<Order> orders) {
 		super(userId, name, email, password, phoneNumber, balance);
 		this.cart = cart;

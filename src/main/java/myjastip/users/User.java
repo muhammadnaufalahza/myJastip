@@ -41,4 +41,8 @@ public abstract class User {
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
+
+	public String getPassword() {
+		return password;
+	}
 }

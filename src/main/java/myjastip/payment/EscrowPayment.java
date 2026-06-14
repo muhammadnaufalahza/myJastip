@@ -3,8 +3,6 @@ package myjastip.payment;
 import myjastip.db.DatabaseUtil;
 import myjastip.users.User;
 
-import java.time.Instant;
-
 public class EscrowPayment {
     protected String paymentId;
     protected String orderId;
