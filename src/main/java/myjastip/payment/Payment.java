@@ -5,10 +5,12 @@ public class Payment {
     protected double amount;
     protected String status;
     protected String createdAt;
+    private String transactionId;
 
-    public void processPayment(double amount,String status){
+    public void processPayment(double amount,String status,String transactionId){
+        this.transactionId = transactionId;
         this.amount = amount;
-        this.status = "Sukses";
+        this.status = status;
         System.out.println("Pembayaran sebesar " + amount + " berhasil diproses.");
     }
 
@@ -16,8 +18,8 @@ public class Payment {
         return "ID Pembayaran: " + paymentId + "  Total: " + amount + "  Status: " + status;
     }
 
-    public void cancelPayment() {
-        this.status = "CANCEL";
-        System.out.println("Pembayaran dengan ID " + paymentId + " telah dibatalkan.");
-    }
+   public void cancelPayment() {
+    this.status = "CANCEL";
+    System.out.println("Pembayaran dengan ID : " + paymentId + " telah dibatalkan.");
+}
 }

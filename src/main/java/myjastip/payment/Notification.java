@@ -35,11 +35,11 @@ public class Notification {
 
             if (title == null || title.trim().isEmpty()) {
                 throw new IllegalArgumentException("Judul notifikasi tidak boleh kosong");
-            }
+        }
 
             if (messageBody == null || messageBody.trim().isEmpty()) {
                 throw new IllegalArgumentException("Isi notifikasi tidak boleh kosong");
-            }
+        }
 
             notificationHistory.add("User: " + userId + " | Judul: " + title);
 
@@ -58,8 +58,7 @@ public class Notification {
         try {
 
             if (notificationId == null || notificationId.trim().isEmpty()) {
-
-                throw new IllegalArgumentException("Notification ID tidak valid");
+            throw new IllegalArgumentException("Notification ID tidak valid");
             }
 
             isRead = true;
@@ -76,17 +75,15 @@ public class Notification {
     public void showNotificationHistory() {
 
         for (String history : notificationHistory) {
-            System.out.println(history);
+        System.out.println(history);
         }
     }
 
     public void showReadStatus() {
 
-        for (Map.Entry<String, Boolean> entry
-                : readStatus.entrySet()) {
-
-            System.out.println("Notification ID: " + entry.getKey() + " | Dibaca: " + entry.getValue());
-        }
+        for (Map.Entry<String, Boolean> entry: readStatus.entrySet()) {
+        System.out.println("Notification ID: " + entry.getKey() + " | Dibaca: " + entry.getValue());
+      }
     }
 
     public String getNotificationId() {
@@ -106,14 +103,13 @@ public class Notification {
         try {
 
             if (title == null || title.trim().isEmpty()) {
-                throw new IllegalArgumentException("Judul tidak boleh kosong");
-            }
+            throw new IllegalArgumentException("Judul tidak boleh kosong");
+        }
 
             this.title = title;
 
         } catch (IllegalArgumentException e) {
-
-            System.out.println("Error: " + e.getMessage());
+          System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -124,15 +120,14 @@ public class Notification {
     public void setMessageBody(String messageBody) {
 
         try {
-
-            if (messageBody == null || messageBody.trim().isEmpty()) {
+        if (messageBody == null || messageBody.trim().isEmpty()) {
 
                 throw new IllegalArgumentException("Isi pesan tidak boleh kosong");
             }
 
             this.messageBody = messageBody;
 
-        } catch (IllegalArgumentException e) {
+          } catch (IllegalArgumentException e) {
 
             System.out.println("Error: " + e.getMessage());
         }
