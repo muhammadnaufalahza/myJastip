@@ -23,7 +23,9 @@ public class Cart {
 		}
 		return total;
 	}
-	
+
+
+
 	public void emptyCart() {
 		cartItems.clear();
 	}
@@ -31,6 +33,11 @@ public class Cart {
 	public boolean isCartEmpty() {
 		return cartItems.isEmpty();
 	}
+
+	public boolean isItemInCart(Item item) {
+		return cartItems.stream().anyMatch(cartitem -> cartitem.getItem() == item);
+	}
+
 
 	public ArrayList<CartItem> getCartItems() {
 		return cartItems;

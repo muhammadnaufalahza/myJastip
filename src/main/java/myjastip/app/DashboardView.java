@@ -2,6 +2,7 @@ package myjastip.app;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -22,6 +23,7 @@ import myjastip.users.User;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
@@ -37,42 +39,102 @@ public class DashboardView {
 //        createDashboardScene();
     }
 
-    public VBox cartsMenu() {
-        VBox cartBox = new VBox(12);
-        for (CartItem cartItem : ((Customer) user).getCart().getCartItems()) {
-            HBox itemBox = new HBox(12);
+    public GridPane cartsMenu() {
+        GridPane cartGrid = new GridPane();
+        cartGrid.setPadding( new Insets(10) );
+        cartGrid.setHgap( 16 );
+        cartGrid.setVgap( 16 );
 
-            Label itemLabel = new Label(cartItem.getItem().getItemName() + " x" + cartItem.getQuantity() + " ( Rp." + cartItem.getSubTotal() + ")");
+        VBox cartBox = new VBox(12);
+
+        Label nameLabel = new Label("Nama");
+        Label qtyLabel = new Label("Jumlah");
+        Label subTotalLabel = new Label("Subtotal");
+
+        cartGrid.add(nameLabel, 0, 0);
+        cartGrid.add(qtyLabel, 1, 0);
+        cartGrid.add(subTotalLabel,  2, 0);
+
+        Label totalPriceLabel = new Label(String.format("%.2f", ((Customer) user).getCart().calculateTotalPrice()));
+        Label transporationFeeLabel = new Label(String.format("%.2f", ((Customer) user).calculateTransporationFee()));
+        Label serviceFeeLabel = new Label(String.format("%.2f", ((Customer) user).calculateServiceFee()));
+        Label finalPriceLabel = new Label(String.format("%.2f", ((Customer) user).calculateFinalPrice()));
+
+        int n = ((Customer) user).getCart().getCartItems().size();
+
+        for (int i = 0; i < n; i++) {
+            CartItem cartItem = ((Customer) user).getCart().getCartItems().get(i);
+
+
+//            HBox itemBox = new HBox(12);
+
+//            Label itemLabel = new Label(cartItem.getItem().getItemName() + " x" + cartItem.getQuantity() + " ( Rp." + cartItem.getSubTotal() + ")");
+//            itemLabel.setMinWidth(100);
+//            itemLabel.setMaxWidth(800);
+
+
+
+            Label itemNameLabel = new Label(cartItem.getItem().getItemName());
+            Label itemQtyLabel = new Label(String.format("%d", cartItem.getQuantity()));
+            Label itemSubTotalLabel = new Label(String.format("%.2f",  cartItem.getSubTotal()));
+
+
+
+            HBox addSubBox = new HBox(16);
             Button itemQtyAdd = new Button("+");
             itemQtyAdd.setFont(new Font("Consolas", 12));
             itemQtyAdd.setStyle("-fx-background-color: white; -fx-border-color: green; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
-            Button itemQtyMin = new Button("-");
-            itemQtyMin.setFont(new Font("Consolas", 12));
-            itemQtyMin.setStyle("-fx-background-color: white; -fx-border-color: red; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px;");
+            Button itemQtySub = new Button("-");
+            itemQtySub.setFont(new Font("Consolas", 12));
+            itemQtySub.setStyle("-fx-background-color: white; -fx-border-color: red; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
-            itemLabel.setMinWidth(100);
-            itemLabel.setMaxWidth(800);
             itemQtyAdd.setOnAction(e -> {
                 cartItem.addQuanitity(1);
-                itemLabel.setText(cartItem.getItem().getItemName() + " x" + cartItem.getQuantity() + " ( Rp." + cartItem.getSubTotal() + ")");
+                itemQtyLabel.setText(String.format("%d", cartItem.getQuantity()));
+                itemSubTotalLabel.setText(String.format("%.2f",  cartItem.getSubTotal()));
+                totalPriceLabel.setText(String.format("%.2f", ((Customer) user).getCart().calculateTotalPrice()));
+                transporationFeeLabel.setText(String.format("%.2f", ((Customer) user).calculateTransporationFee()));
+                serviceFeeLabel.setText(String.format("%.2f", ((Customer) user).calculateServiceFee()));
+                finalPriceLabel.setText(String.format("%.2f", ((Customer) user).calculateFinalPrice()));
+
             });
-            itemQtyMin.setOnAction(e -> {
+            itemQtySub.setOnAction(e -> {
                 if (cartItem.getQuantity() > 1) {
                     cartItem.subtractQuanitity(1);
-                    itemLabel.setText(cartItem.getItem().getItemName() + " x" + cartItem.getQuantity() + " ( Rp." + cartItem.getSubTotal() + ")");
+                    itemQtyLabel.setText(String.format("%d", cartItem.getQuantity()));
+                    itemSubTotalLabel.setText(String.format("%.2f",  cartItem.getSubTotal()));
                 } else {
                     ((Customer) user).getCart().removeItem(cartItem);
-                    cartBox.getChildren().remove(itemBox);
+                    cartGrid.getChildren().removeAll(itemNameLabel, addSubBox, itemSubTotalLabel);
                 }
+                totalPriceLabel.setText(String.format("%.2f", ((Customer) user).getCart().calculateTotalPrice()));
+                transporationFeeLabel.setText(String.format("%.2f", ((Customer) user).calculateTransporationFee()));
+                serviceFeeLabel.setText(String.format("%.2f", ((Customer) user).calculateServiceFee()));
+                finalPriceLabel.setText(String.format("%.2f", ((Customer) user).calculateFinalPrice()));
             });
 
-            itemBox.getChildren().addAll(itemLabel, itemQtyAdd, itemQtyMin);
+            Button b = new Button();
 
-            cartBox.getChildren().add(itemBox);
+            addSubBox.getChildren().addAll(itemQtyAdd, itemQtyLabel, itemQtySub);
+
+            cartGrid.add(itemNameLabel, 0, i+1);
+            cartGrid.add(addSubBox,  1, i+1);
+            cartGrid.add(itemSubTotalLabel, 2, i+1);
+
+
         }
+        cartGrid.add(new Label("Total Harga Barang"), 0, n+1);
+        cartGrid.add(new Label("Biaya Transportasi"), 0, n+2);
+        cartGrid.add(new Label("Biaya Layanan"),  0, n+3);
+        cartGrid.add(new Label("Total Harga Akhir"), 0, n+4);
 
-        return cartBox;
+        cartGrid.add(totalPriceLabel, 2, n+1);
+        cartGrid.add(transporationFeeLabel, 2, n+2);
+        cartGrid.add(serviceFeeLabel,  2, n+3);
+        cartGrid.add(finalPriceLabel, 2, n+4);
+
+        return cartGrid;
     }
 
     public VBox orderMenu() {
@@ -213,7 +275,7 @@ public class DashboardView {
 
             double totalPrice = ((Customer) user).calculateFinalPrice();
 
-            Button orderButton = new Button("Buat Pesanan (Rp. " +  new BigDecimal(String.valueOf(totalPrice)).toPlainString() + ")");
+            Button orderButton = new Button("Buat Pesanan");
             orderButton.setStyle("-fx-background-color: #00FF00; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px;");
 
             orderButton.setOnAction(e -> {
@@ -227,7 +289,7 @@ public class DashboardView {
                         customer.setOrderLocation(new Location());
                     }
                     Order order = customer.createOrder();
-                    ((VBox) storeScrollPane.getContent()).getChildren().clear();
+                    ((GridPane) storeScrollPane.getContent()).getChildren().clear();
 
                     UUID uuid = UUID.randomUUID();
                     EscrowPayment payment = new EscrowPayment(uuid.toString(), order.getOrderId(), order.getTotalBill());

@@ -8,8 +8,6 @@ public abstract class User {
 	protected String phoneNumber;
 	protected double balance;
 
-	public User() {
-	}
 	public User(String userId, String name, String email, String password, String phoneNumber, double balance) {
 		this.userId = userId;
 		this.name = name;
@@ -18,18 +16,6 @@ public abstract class User {
 		this.phoneNumber = phoneNumber;
 		this.balance = balance;
 
-	}
-
-	public boolean isNull() {
-		return userId != null;
-	}
-
-	public void login() {
-
-	}
-	
-	public void logout() {
-		
 	}
 
 	public String getUserId() {

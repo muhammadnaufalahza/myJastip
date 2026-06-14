@@ -37,45 +37,47 @@ public class DatabaseUtil {
                 return null;
             }
         } catch (PSQLException e) {
-            System.out.println("Error PSQLException pada getUserId()");
+            System.out.println("Error PSQLException pada getUserId(): " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error");
+            System.out.println("Terjadi Error pada getUserId(): " + e.getMessage());
             System.exit(0);
         }
         return null;
     }
 
     public static User getUser(String userId) {
-        if (userId == null) return new Customer();
+        if (userId == null) return null;
         try {
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
             String query = String.format("SELECT * FROM users WHERE id = '%s'", userId);
             var resultSet = statement.executeQuery(query);
-            resultSet.next();
-            String userName = resultSet.getString("name");
-            String userEmail = resultSet.getString("email");
-            String userPassword = resultSet.getString("password");
-            String userPhoneNumber = resultSet.getString("phone_number");
-//            String userAddress = resultSet.getString("address");
-            boolean isJastiper = resultSet.getBoolean("is_jastiper");
-            double balance = resultSet.getDouble("balance");
+            if (resultSet.next()) {
 
-            if (isJastiper) {
-                return new Jastiper(userId, userName, userEmail, userPassword, userPhoneNumber, balance, new ArrayList<>());
-            } else {
-                return new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, balance, new Cart(), new Location(), new ArrayList<>(), new ArrayList<>());
+                String userName = resultSet.getString("name");
+                String userEmail = resultSet.getString("email");
+                String userPassword = resultSet.getString("password");
+                String userPhoneNumber = resultSet.getString("phone_number");
+                boolean isJastiper = resultSet.getBoolean("is_jastiper");
+                double balance = resultSet.getDouble("balance");
+
+                if (isJastiper) {
+                    return new Jastiper(userId, userName, userEmail, userPassword, userPhoneNumber, balance, new ArrayList<>());
+                } else {
+                    return new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, balance, new Cart(), new Location(), new ArrayList<>(), new ArrayList<>());
+                }
             }
 
+
         } catch (PSQLException e) {
-            System.out.println("Error PSQLException pada getUser()");
+            System.out.println("Error PSQLException pada getUser(): " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error");
+            System.out.println("Terjadi Error: " + e.getMessage());
             System.exit(0);
         }
-        return new Customer();
+        return null;
     }
 
     public static void changeUserBalance(String userId, double newBalance) {
@@ -423,12 +425,8 @@ public class DatabaseUtil {
         try {
             Connection connection = getConnection();
 
-            Instant now = Instant.now();
-            Timestamp timestamp = Timestamp.from(now);
-
-            String query = String.format("INSERT INTO payments (id, order_id, status, amount, updated_at) VALUES ('%s', '%s', '%s', %f, ?);", payment.getPaymentId(), payment.getOrderId(), payment.getStatus(), payment.getAmount());
+            String query = String.format("INSERT INTO payments (id, order_id, status, amount) VALUES ('%s', '%s', '%s', %f);", payment.getPaymentId(), payment.getOrderId(), payment.getStatus(), payment.getAmount());
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setObject(1, timestamp);
             pstmt.executeUpdate();
 
         } catch (PSQLException e) {
@@ -469,9 +467,8 @@ public class DatabaseUtil {
             String ordId = resultSet.getString("order_id");
             String paymentStatus = resultSet.getString("status");
             double amount = resultSet.getDouble("amount");
-            String updatedAt = resultSet.getString("updated_at");
 
-            return new EscrowPayment(paymentId, ordId, amount, PaymentStatus.valueOf(paymentStatus), updatedAt);
+            return new EscrowPayment(paymentId, ordId, amount, PaymentStatus.valueOf(paymentStatus));
 
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada getPaymentByOrderId(): " + e.getMessage());
@@ -496,9 +493,8 @@ public class DatabaseUtil {
                 String ordId = resultSet.getString("order_id");
                 String paymentStatus = resultSet.getString("status");
                 double amount = resultSet.getDouble("amount");
-                String updatedAt = resultSet.getString("updated_at");
 
-                payments.add(new EscrowPayment(paymentId, ordId, amount, PaymentStatus.valueOf(paymentStatus), updatedAt));
+                payments.add(new EscrowPayment(paymentId, ordId, amount, PaymentStatus.valueOf(paymentStatus)));
 
             }
         } catch (PSQLException e) {

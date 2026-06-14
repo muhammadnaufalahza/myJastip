@@ -10,21 +10,19 @@ public class EscrowPayment {
     protected String orderId;
     protected double amount;
     protected PaymentStatus status;
-    protected String updatedAt;
 
     public EscrowPayment(String paymentId, String orderId, double amount) {
         this.paymentId = paymentId;
         this.orderId = orderId;
         this.amount = amount;
         this.status = PaymentStatus.UNFINISHED;
-        this.updatedAt = Instant.now().toString();
+
     }
-    public EscrowPayment(String paymentId, String orderId, double amount, PaymentStatus status, String updatedAt) {
+    public EscrowPayment(String paymentId, String orderId, double amount, PaymentStatus status) {
         this.paymentId = paymentId;
         this.orderId = orderId;
         this.amount = amount;
         this.status = status;
-        this.updatedAt = updatedAt;
     }
 
     public void processPayment(double amount) {
@@ -44,7 +42,6 @@ public class EscrowPayment {
     public void releaseFunds() {
         Order order = DatabaseUtil.getOrder(orderId);
         User user = DatabaseUtil.getUser(order.getJastiperId());
-        System.out.println(order.getJastiperId());
         DatabaseUtil.changeUserBalance(user.getUserId(), user.getBalance() + amount);
         DatabaseUtil.changePaymentStatus(paymentId, PaymentStatus.RELEASED);
         user.setBalance(user.getBalance() + amount);
@@ -94,11 +91,4 @@ public class EscrowPayment {
         this.status = status;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

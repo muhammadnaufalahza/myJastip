@@ -7,9 +7,7 @@ import myjastip.storage.Cart;
 import myjastip.storage.CartItem;
 import myjastip.storage.Item;
 
-import javax.xml.crypto.Data;
 import java.util.UUID;
-
 
 import java.util.ArrayList;
 
@@ -19,10 +17,6 @@ public class Customer extends User implements Payable {
 	private Location orderLocation;
 	private ArrayList<EscrowPayment> paymentHistory;
 	private ArrayList<Order> orders;
-
-	public Customer() {
-		super();
-	}
 
 	public Customer(String userId, String name, String email, String password, String phoneNumber, double balance, Cart cart, Location orderLocation, ArrayList<EscrowPayment> paymentHistory, ArrayList<Order> orders) {
 		super(userId, name, email, password, phoneNumber, balance);
@@ -83,9 +77,8 @@ public class Customer extends User implements Payable {
 					uuid.toString(),
 					OrderStatus.PENDING,
 					orderLocation,
-//					new Location(orderLocation.getLocationName(), orderLocation.getLatitude(), orderLocation.getLongitude()),
 					cart.calculateTotalPrice(),
-					cart.calculateTotalPrice() * 0.1, cart.calculateTotalPrice() * 0.05,
+					calculateTransporationFee(), calculateServiceFee(),
 					userId,
 					cart
 			);
@@ -99,9 +92,18 @@ public class Customer extends User implements Payable {
 
 	}
 
-	public double calculateFinalPrice() {
-		return cart.calculateTotalPrice() * 1.15;
+	public double calculateTransporationFee() {
+		return cart.calculateTotalPrice() * 0.1;
 	}
+
+	public double calculateServiceFee() {
+		return cart.calculateTotalPrice() * 0.05;
+	}
+
+	public double calculateFinalPrice() {
+		return cart.calculateTotalPrice() + calculateTransporationFee() + calculateServiceFee();
+	}
+
 
 	public void cancelOrder(Order order) {
 		DatabaseUtil.changeOrderStatus(order.getOrderId(), OrderStatus.CANCELLED);

@@ -49,7 +49,7 @@ public class AuthView {
             if (!(name.isEmpty() || pass.isEmpty())) {
                 String userId = DatabaseUtil.getUserId(name, pass);
                 User user = DatabaseUtil.getUser(userId);
-                if (user.isNull()) {
+                if (user != null) {
                     appWindow.showDashboardScene(user);
                 } else {
                     System.out.println("User atau Password Salah!");
