@@ -29,7 +29,6 @@ public class Order {
 		this.totalBill = this.totalItemPrice + this.transportationFee + this.serviceFee;
 	}
 
-	// ini overloading method ingat dia itu harus sama dengan nama class nya dan field nya //
 	public Order(String orderId, OrderStatus orderStatus, Location location, double totalItemPrice, double transportationFee, double serviceFee, String receiverId, Cart orderedCart, String jastiperId) {
 		this.orderId = orderId;
 		this.orderStatus = orderStatus;

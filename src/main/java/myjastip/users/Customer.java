@@ -7,6 +7,7 @@ import myjastip.storage.Cart;
 import myjastip.storage.CartItem;
 import myjastip.storage.Item;
 
+import java.util.List;
 import java.util.UUID;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class Customer extends User implements Payable {
 	private Cart cart;
 	private Location orderLocation;
 	private ArrayList<EscrowPayment> paymentHistory;
-	private ArrayList<Order> orders;
+	private final ArrayList<Order> orders;
 
 	public Customer(String userId, String name, String email, String password, String phoneNumber, double balance) {
 		super(userId, name, email, password, phoneNumber, balance);
@@ -46,22 +47,14 @@ public class Customer extends User implements Payable {
 
 	@Override
 	public ArrayList<EscrowPayment> getPaymentHistory() {
+		paymentHistory.clear();
 		ArrayList<EscrowPayment> tempPayments = new ArrayList<>();
-		DatabaseUtil.insertPaymentArray(paymentHistory);
-		paymentHistory.stream()
-				.filter(payment -> DatabaseUtil.getOrder(payment.getOrderId()).getReceiverId().equals(userId));
+		DatabaseUtil.insertPaymentArray(tempPayments);
+		tempPayments.stream()
+				.filter(payment -> DatabaseUtil.getOrder(payment.getOrderId()).getReceiverId().equals(userId))
+				.forEach(payment -> paymentHistory.add(payment));
+
 		return paymentHistory;
-	}
-
-	public ArrayList<Item> searchItem(String keyword) {
-		ArrayList<Item> hasilCari = new ArrayList<>();
-		for (CartItem cartItem : cart.getCartItems()){
-			if (cartItem.getItem().getItemName().toLowerCase().contains(keyword.toLowerCase())) {
-
-				hasilCari.add(cartItem.getItem());
-			}
-		}
-		return hasilCari;
 	}
 
 	public void addToCart(Item item, int qty) {
@@ -131,18 +124,6 @@ public class Customer extends User implements Payable {
 		EscrowPayment payment = DatabaseUtil.getPaymentByOrderId(order.getOrderId());
 		payment.releaseFunds();
 	}
-
-	public void rate(Jastiper service, int value) {
-		try {
-			if (value < 1 || value > 5) {
-				throw new IllegalArgumentException("Rating harus 1 - 5");
-			}
-			service.addRating(value);
-		} catch (IllegalArgumentException e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
 
 	public Cart getCart() {
 		return cart;
