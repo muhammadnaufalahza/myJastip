@@ -14,11 +14,6 @@ public class Jastiper extends User {
         this.acceptedOrders = new ArrayList<>();
     }
 
-    public Jastiper(String userId, String name, String email, String password, String phoneNumber, double balance, ArrayList<Order> acceptedOrders) {
-        super(userId, name, email, password, phoneNumber, balance);
-        this.acceptedOrders = acceptedOrders;
-    }
-
     public void acceptOrder(Order order) {
         try {
             updateOrderStatus(order, OrderStatus.OUT_FOR_DELIVERY);

@@ -10,6 +10,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import myjastip.db.DatabaseUtil;
+import myjastip.location.InvalidCoordinateException;
 import myjastip.location.Location;
 import myjastip.payment.EmptyOrderException;
 import myjastip.payment.Order;
@@ -281,7 +282,7 @@ public class DashboardView {
                 Customer customer = (Customer) user;
                 try {
                     if (!(inputAddress.getText().isEmpty() || inputLatitude.getText().isEmpty() || inputLongitude.getText().isEmpty())) {
-                        customer.setOrderLocation(new Location(inputAddress.getText(), Double.parseDouble(inputLatitude.getText()), Double.parseDouble(inputLatitude.getText())));
+                        customer.setOrderLocation(inputAddress.getText(), Double.parseDouble(inputLatitude.getText()), Double.parseDouble(inputLatitude.getText()));
                     } else {
                         throw new InvalidAddressException("Isi Alamat dengan Lengkap!");
                     }
@@ -292,7 +293,7 @@ public class DashboardView {
                     EscrowPayment payment = new EscrowPayment(uuid.toString(), order.getOrderId(), order.getTotalBill());
                     DatabaseUtil.insertPayment(payment);
                     appWindow.showPaymentScene(customer, payment);
-                } catch (EmptyOrderException | InvalidAddressException ex) {
+                } catch (EmptyOrderException | InvalidAddressException | InvalidCoordinateException ex) {
                     System.out.println("Error: " + ex.getMessage());
                 }
 

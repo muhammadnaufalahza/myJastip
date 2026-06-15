@@ -9,6 +9,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import myjastip.db.DatabaseUtil;
 import myjastip.payment.Order;
 import myjastip.payment.OrderStatus;
 import myjastip.users.Jastiper;
@@ -28,7 +29,7 @@ public class JastiperOrderView {
         for (Order order : jastiper.getAcceptedOrders()) {
             HBox orderMenu = new HBox(12);
 
-            Label destinationLabel = new Label("Tujuan: " + order.getLocation().getLocationName());
+            Label destinationLabel = new Label("Penerima: " + DatabaseUtil.getUser(order.getReceiverId()));
             Label statusLabel = new Label("Status: " + order.getOrderStatus());
             Label locationLabel = new Label("Lokasi: " + order.getLocation());
 

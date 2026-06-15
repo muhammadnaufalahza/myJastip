@@ -17,6 +17,7 @@ import java.sql.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class DatabaseUtil {
     public static Connection getConnection() throws SQLException {
@@ -79,9 +80,9 @@ public class DatabaseUtil {
                 double balance = resultSet.getDouble("balance");
 
                 if (isJastiper) {
-                    return new Jastiper(userId, userName, userEmail, userPassword, userPhoneNumber, balance, new ArrayList<>());
+                    return new Jastiper(userId, userName, userEmail, userPassword, userPhoneNumber, balance);
                 } else {
-                    return new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, balance, new Cart(), new Location(), new ArrayList<>(), new ArrayList<>());
+                    return new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, balance);
                 }
             }
 
@@ -117,7 +118,7 @@ public class DatabaseUtil {
 
 
 
-    public static void insertItems(ArrayList<Item> items) {
+    public static void insertItems(List<Item> items) {
         items.clear();
         try {
             Connection connection = getConnection();
@@ -144,10 +145,10 @@ public class DatabaseUtil {
 
             }
         } catch (PSQLException e) {
-            System.out.println("Error pada PSQLException pada insertItems()");
+            System.out.println("Error pada PSQLException pada insertItems(): " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada insertItems()");
+            System.out.println("Terjadi Error pada insertItems(): " + e.getMessage());
             System.exit(0);
 
         }
@@ -167,16 +168,16 @@ public class DatabaseUtil {
             int rowsInserted = pstmt.executeUpdate();
 
         } catch (PSQLException e) {
-            System.out.println("Error pada PSQLException pada insertOrder()");
+            System.out.println("Error pada PSQLException pada insertOrder(): " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada insertOrder()");
+            System.out.println("Terjadi Error pada insertOrder(): " + e.getMessage());
             System.exit(0);
         }
     }
 
 
-    public static void insertOrders(ArrayList<Order> orders) {
+    public static void insertOrders(List<Order> orders) {
         orders.clear();
         try {
             Connection connection = getConnection();
@@ -202,16 +203,16 @@ public class DatabaseUtil {
 
             }
         } catch (PSQLException e) {
-            System.out.println("Error pada PSQLException pada insertItems()");
+            System.out.println("Error pada PSQLException pada insertItems(): " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada insertItems()");
+            System.out.println("Terjadi Error pada insertItems(): " + e.getMessage());
             System.exit(0);
 
         }
     }
 
-    public static void insertOrdersByReceiverId(ArrayList<Order> orders, String userId) {
+    public static void insertOrdersByReceiverId(List<Order> orders, String userId) {
         orders.clear();
         try {
             Connection connection = getConnection();
@@ -246,7 +247,7 @@ public class DatabaseUtil {
 
         }
     }
-    public static void insertOrdersByJastiperId(ArrayList<Order> orders, String userId) {
+    public static void insertOrdersByJastiperId(List<Order> orders, String userId) {
         orders.clear();
         try {
             Connection connection = getConnection();
@@ -393,10 +394,10 @@ public class DatabaseUtil {
 
 
         } catch (PSQLException e) {
-            System.out.println("Error PSQLException pada changeOrderStatus()");
+            System.out.println("Error PSQLException pada changeOrderStatus(): " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada changeOrderStatus()");
+            System.out.println("Terjadi Error pada changeOrderStatus(): " + e.getMessage());
             System.exit(0);
         }
     }
@@ -411,10 +412,10 @@ public class DatabaseUtil {
 
 
         } catch (PSQLException e) {
-            System.out.println("Error PSQLException pada changeOrderStatus()");
+            System.out.println("Error PSQLException pada changeOrderStatus(): " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada changeOrderStatus()");
+            System.out.println("Terjadi Error pada changeOrderStatus(): " + e.getMessage());
             System.exit(0);
         }
     }
@@ -428,10 +429,10 @@ public class DatabaseUtil {
             int rowsDeleted = pstmt.executeUpdate();
 
         } catch (PSQLException e) {
-            System.out.println("Error PSQLException pada removeOrder()");
+            System.out.println("Error PSQLException pada removeOrder(): " + e.getMessage());
             System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada removeOrder()");
+            System.out.println("Terjadi Error pada removeOrder(): " + e.getMessage());
             System.exit(0);
         }
     }
@@ -496,7 +497,7 @@ public class DatabaseUtil {
         return null;
     }
 
-    public static void insertPaymentArray(ArrayList<EscrowPayment> payments) {
+    public static void insertPaymentArray(List<EscrowPayment> payments) {
         payments.clear();
         try {
             Connection connection = getConnection();

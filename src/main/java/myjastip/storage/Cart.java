@@ -1,9 +1,14 @@
 package myjastip.storage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Cart {
-	private ArrayList<CartItem> cartItems = new ArrayList<>();
+	private final List<CartItem> cartItems;
+
+	public Cart() {
+		this.cartItems = new ArrayList<>();
+	}
 
 	public void addItem(Item item, int qty) {
 		cartItems.add(new CartItem(item, qty));
@@ -37,12 +42,8 @@ public class Cart {
 		return cartItems.stream().anyMatch(cartitem -> cartitem.getItem() == item);
 	}
 
-
-	public ArrayList<CartItem> getCartItems() {
+	public List<CartItem> getCartItems() {
 		return cartItems;
 	}
 
-	public void setCartItems(ArrayList<CartItem> cartItems) {
-		this.cartItems = cartItems;
-	}
 }

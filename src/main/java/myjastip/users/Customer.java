@@ -1,6 +1,7 @@
 package myjastip.users;
 
 import myjastip.db.DatabaseUtil;
+import myjastip.location.InvalidCoordinateException;
 import myjastip.location.Location;
 import myjastip.payment.*;
 import myjastip.storage.Cart;
@@ -16,23 +17,14 @@ public class Customer extends User implements Payable {
 
 	private Cart cart;
 	private Location orderLocation;
-	private ArrayList<EscrowPayment> paymentHistory;
-	private final ArrayList<Order> orders;
+	private List<EscrowPayment> paymentHistory;
+	private final List<Order> orders;
 
 	public Customer(String userId, String name, String email, String password, String phoneNumber, double balance) {
 		super(userId, name, email, password, phoneNumber, balance);
 		this.cart = new Cart();
-		this.orderLocation = new Location();
 		this.paymentHistory = new ArrayList<>();
 		this.orders = new ArrayList<>();
-	}
-
-	public Customer(String userId, String name, String email, String password, String phoneNumber, double balance, Cart cart, Location orderLocation, ArrayList<EscrowPayment> paymentHistory, ArrayList<Order> orders) {
-		super(userId, name, email, password, phoneNumber, balance);
-		this.cart = cart;
-		this.orderLocation = orderLocation;
-		this.paymentHistory = paymentHistory;
-		this.orders = orders;
 	}
 
 	@Override
@@ -46,7 +38,7 @@ public class Customer extends User implements Payable {
 	}
 
 	@Override
-	public ArrayList<EscrowPayment> getPaymentHistory() {
+	public List<EscrowPayment> getPaymentHistory() {
 		paymentHistory.clear();
 		ArrayList<EscrowPayment> tempPayments = new ArrayList<>();
 		DatabaseUtil.insertPaymentArray(tempPayments);
@@ -129,25 +121,24 @@ public class Customer extends User implements Payable {
 		return cart;
 	}
 
-	public void setCart(Cart cart) {
-		this.cart = cart;
+	public void setOrderLocation(String location, double latitude, double longitude) {
+		if ((latitude < -90 || latitude > 90) && (longitude < -180 || longitude > 180)) {
+			throw new InvalidCoordinateException("Koordinat tidak valid!");
+		}
+		if (latitude < -90 || latitude > 90) {
+			throw new InvalidCoordinateException("Latitude tidak valid!");
+		}
+		if (longitude < -180 || longitude > 180) {
+			throw new InvalidCoordinateException("Longitude tidak valid!");
+		}
+		this.orderLocation = new Location(location, latitude, longitude);
 	}
 
-	public Location getOrderLocation() {
-		return orderLocation;
-	}
-
-	public void setOrderLocation(Location orderLocation) {
-		this.orderLocation = orderLocation;
-	}
-
-	public void setPaymentHistory(ArrayList<EscrowPayment> paymentHistory) {
-		this.paymentHistory = paymentHistory;
-	}
-
-	public ArrayList<Order> getOrders() {
+	public List<Order> getOrders() {
 		DatabaseUtil.insertOrdersByReceiverId(orders, userId);
 		return orders;
 	}
+
+
 
 }
