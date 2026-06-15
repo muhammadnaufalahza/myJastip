@@ -7,18 +7,21 @@ public class Dispute {
     private String disputeId;
     private String paymentId;
     private String customerId;
+    private String jastiperId;
     private String reason;
     private DisputeStatus status;
     private List<Evidence> evidences;
 
-    public Dispute(String disputeId, String paymentId, String customerId, String reason, ArrayList<Evidence> evidences) {
+    public Dispute(String disputeId, String paymentId, String customerId, String jastiperId, String reason) {
         this.disputeId = disputeId;
         this.paymentId = paymentId;
         this.customerId = customerId;
+        this.jastiperId = jastiperId;
         this.reason = reason;
         this.status = DisputeStatus.OPEN;
         this.evidences = new ArrayList<>();
     }
+
 
     public String getDisputeId() {
         return disputeId;
@@ -66,5 +69,13 @@ public class Dispute {
 
     public void setEvidences(List<Evidence> evidences) {
         this.evidences = evidences;
+    }
+
+    public String getJastiperId() {
+        return jastiperId;
+    }
+
+    public void setJastiperId(String jastiperId) {
+        this.jastiperId = jastiperId;
     }
 }
