@@ -5,9 +5,6 @@ public class Location {
     private double latitude;
     private double longitude;
 
-    public Location() {
-    }
-
     public Location(String location, double latitude, double longitude) {
         this.locationName = location;
         this.latitude = latitude;
@@ -31,7 +28,10 @@ public class Location {
                 throw new InvalidCoordinateException("Longitude tidak valid!");
             }
 
-        } catch (InvalidCoordinateException e) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+
+        } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }

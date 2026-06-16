@@ -44,10 +44,7 @@ public class MapService {
                 throw new Exception("Lokasi tidak valid");
             }
 
-            return "Rute dari "
-                    + loc1.getLocationName()
-                    + " ke "
-                    + loc2.getLocationName();
+            return "Rute dari " + loc1.getLocationName() + " ke "+ loc2.getLocationName();
 
         } catch (Exception e) {
             return "Error: " + e.getMessage();
@@ -60,12 +57,7 @@ public class MapService {
                 throw new Exception("Lokasi tidak valid");
             }
 
-            return "Rute menggunakan "
-                    + transportasi
-                    + " dari "
-                    + loc1.getLocationName()
-                    + " ke "
-                    + loc2.getLocationName();
+            return "Rute menggunakan " + transportasi + " dari "+ loc1.getLocationName() + " ke "+ loc2.getLocationName();
 
         } catch (Exception e) {
             return "Error: " + e.getMessage();
