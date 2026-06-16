@@ -357,23 +357,24 @@ public class DatabaseUtil {
             Statement statement = connection.createStatement();
             String query = String.format("SELECT * FROM orders WHERE id = '%s'", orderId);
             var resultSet = statement.executeQuery(query);
-            resultSet.next();
-            String orderStatus = resultSet.getString("status");
-            String locationName = resultSet.getString("location_name");
-            double locationLatitude = resultSet.getDouble("location_latitude");
-            double locationLongitude = resultSet.getDouble("location_longitude");
-            double totalItemPrice = resultSet.getDouble("total_item_price");
-            double transportationFee = resultSet.getDouble("total_item_price");
-            double serviceFee = resultSet.getDouble("service_fee");
-            String rawOrderItems = resultSet.getString("order_items");
-            String receiverId = resultSet.getString("receiver_id");
-            String jastiperId = resultSet.getString("jastiper_id");
+            if (resultSet.next()) {
+                String orderStatus = resultSet.getString("status");
+                String locationName = resultSet.getString("location_name");
+                double locationLatitude = resultSet.getDouble("location_latitude");
+                double locationLongitude = resultSet.getDouble("location_longitude");
+                double totalItemPrice = resultSet.getDouble("total_item_price");
+                double transportationFee = resultSet.getDouble("total_item_price");
+                double serviceFee = resultSet.getDouble("service_fee");
+                String rawOrderItems = resultSet.getString("order_items");
+                String receiverId = resultSet.getString("receiver_id");
+                String jastiperId = resultSet.getString("jastiper_id");
 
-            Gson orderGson = new Gson();
-            Cart cart = orderGson.fromJson(rawOrderItems, Cart.class);
+                Gson orderGson = new Gson();
+                Cart cart = orderGson.fromJson(rawOrderItems, Cart.class);
 
-            return new Order(orderId, OrderStatus.valueOf(orderStatus), new Location(locationName, locationLatitude, locationLongitude), totalItemPrice, transportationFee, serviceFee, receiverId, cart, jastiperId);
-
+                return new Order(orderId, OrderStatus.valueOf(orderStatus), new Location(locationName, locationLatitude, locationLongitude), totalItemPrice, transportationFee, serviceFee, receiverId, cart, jastiperId);
+            }
+            return null;
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada getOrder(): " + e.getMessage());
             System.exit(0);

@@ -39,12 +39,12 @@ public class Customer extends User implements Payable {
 
 	@Override
 	public List<EscrowPayment> getPaymentHistory() {
-		paymentHistory.clear();
-		ArrayList<EscrowPayment> tempPayments = new ArrayList<>();
-		DatabaseUtil.insertPaymentArray(tempPayments);
-		tempPayments.stream()
+//		paymentHistory.clear();
+		DatabaseUtil.insertPaymentArray(paymentHistory);
+
+		paymentHistory = paymentHistory.stream()
 				.filter(payment -> DatabaseUtil.getOrder(payment.getOrderId()).getReceiverId().equals(userId))
-				.forEach(payment -> paymentHistory.add(payment));
+				.toList();
 
 		return paymentHistory;
 	}
