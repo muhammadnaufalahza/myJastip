@@ -499,11 +499,11 @@ public class DatabaseUtil {
     }
 
     public static void insertPaymentArray(List<EscrowPayment> payments) {
-        payments.clear();
         try {
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
             String query = "SELECT * FROM payments";
+            payments.clear();
 
             var resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
@@ -511,9 +511,7 @@ public class DatabaseUtil {
                 String ordId = resultSet.getString("order_id");
                 String paymentStatus = resultSet.getString("status");
                 double amount = resultSet.getDouble("amount");
-
                 payments.add(new EscrowPayment(paymentId, ordId, amount, PaymentStatus.valueOf(paymentStatus)));
-
             }
         } catch (PSQLException e) {
             System.out.println("Error pada PSQLException pada insertPaymentArray(): " + e.getMessage());

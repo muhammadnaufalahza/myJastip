@@ -2,12 +2,10 @@ package myjastip.app;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import myjastip.db.DatabaseUtil;
 import myjastip.location.InvalidCoordinateException;
@@ -32,9 +30,11 @@ public class DashboardView {
     private final MyJastipWindow appWindow;
     private Scene dashboardScene;
     private User user;
+    private BorderPane mainLayout;
 
     public DashboardView(MyJastipWindow appWindow) {
         this.appWindow = appWindow;
+        this.mainLayout = new BorderPane();
 //        createDashboardScene();
     }
 
@@ -172,7 +172,8 @@ public class DashboardView {
     }
 
 
-    public void createDashboardScene() {
+    public VBox createCustomerDashboard() {
+
         VBox layout = new VBox(20);
         layout.setPadding(new Insets(40));
         layout.setAlignment(Pos.CENTER);
@@ -195,10 +196,7 @@ public class DashboardView {
 
 
         layout.getChildren().addAll(welcomeLabel, userTypeLabel, balanceLabel);
-
         if (user instanceof Customer) {
-
-
             Button paymentHistoryButton = new Button("Histori Pembayaran");
             paymentHistoryButton.setStyle("-fx-background-color: #88FF74; -fx-text-fill: black; -fx-background-radius: 20px; -fx-border-radius: 20px;");
             paymentHistoryButton.setOnAction(e -> appWindow.showPaymentHistoryScene((Customer) user));
@@ -324,12 +322,101 @@ public class DashboardView {
 
             layout.getChildren().addAll(acceptedOrdersButton, orderScrollPane, logoutButton);
         }
-        dashboardScene = new Scene(layout, 1200, 800);
+
+        return layout;
+    }
+
+
+    public void createDashboardScene() {
+        VBox sidebar = createSidebar();
+
+        mainLayout.setLeft(sidebar);
+        showView(createCustomerDashboard());
+        dashboardScene = new Scene(mainLayout, 1200, 800);
+    }
+
+    private VBox createSidebar() {
+        VBox sidebar = new VBox(10); // Vertical layout with 10px spacing
+        sidebar.setPadding(new Insets(15));
+        sidebar.setPrefWidth(200);
+
+        // Hardcoded basic styling (best practice: migrate to an external CSS stylesheet)
+        sidebar.setStyle(
+            "-fx-background-color: rgba(22, 36, 38, 0.95);" +
+            "-fx-padding: 24;" +
+            "-fx-pref-width: 260;" +
+            "-fx-min-height: 100%;" +
+            "-fx-border-color: transparent rgba(255,255,255,0.08) transparent transparent;" +
+            "-fx-border-width: 0 1 0 0;"
+        );
+
+        // Generate individual interactive navigation nodes
+        Button btnDashboard = createNavButton("Dashboard");
+        Button btnAnalytics = createNavButton("Analytics");
+        Button btnSettings = createNavButton("Settings");
+
+
+        String defaultNavStyle =
+                "-fx-font-family: 'Inter';" +
+                "-fx-font-size: 14px;" +
+                "-fx-font-weight: 500;" +
+                "-fx-text-fill: #a3b8a0;" +
+                "-fx-background-color: transparent;" +
+                "-fx-background-radius: 8;" +
+                "-fx-padding: 10 14 10 14;" +
+                "-fx-cursor: hand;" +
+                "-fx-alignment: center-left;";
+
+        String activeNavStyle =
+                "-fx-font-family: 'Inter';" +
+                "-fx-font-size: 14px;" +
+                "-fx-font-weight: 500;" +
+                "-fx-text-fill: #8aad7a;" +
+                "-fx-background-color: rgba(107, 158, 126, 0.12);" +
+                "-fx-background-radius: 8;" +
+                "-fx-padding: 10 14 10 14;" +
+                "-fx-cursor: hand;" +
+                "-fx-alignment: center-left;";
+//        // Attach specialized view-swapping actions to button click contexts
+        btnDashboard.setOnAction(e -> {
+            showView(createCustomerDashboard());
+            sidebar.getChildren().forEach(node -> node.setStyle(defaultNavStyle));
+            btnDashboard.setStyle(activeNavStyle);
+        });
+//        btnAnalytics.setOnAction(e -> showView("Analytics Panel Active"));
+//        btnSettings.setOnAction(e -> showView("Settings Panel Active"));
+
+        sidebar.getChildren().addAll(btnDashboard, btnAnalytics, btnSettings);
+        return sidebar;
+    }
+
+    private Button createNavButton(String text) {
+        Button btn = new Button(text);
+        btn.setMaxWidth(Double.MAX_VALUE); // Force button to stretch to full VBox width
+        btn.setStyle(
+            "-fx-font-family: 'Inter';" +
+            "-fx-font-size: 14px;" +
+            "-fx-font-weight: 500;" +
+            "-fx-text-fill: #a3b8a0;" +
+            "-fx-background-color: transparent;" +
+            "-fx-background-radius: 8;" +
+            "-fx-padding: 10 14 10 14;" +
+            "-fx-cursor: hand;" +
+            "-fx-alignment: center-left;"
+        );
+        return btn;
+    }
+
+    private void showView(Node node) {
+        StackPane viewContainer = new StackPane();
+        viewContainer.getChildren().add(node);
+        mainLayout.setCenter(viewContainer);
     }
 
     public Scene getDashboardScene() {
         createDashboardScene();
         return dashboardScene;
+
     }
 
     public void setUser(User user) {

@@ -2,6 +2,7 @@ package myjastip.storage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Cart {
 	private final List<CartItem> cartItems;
@@ -39,7 +40,7 @@ public class Cart {
 	}
 
 	public boolean isItemInCart(Item item) {
-		return cartItems.stream().anyMatch(cartitem -> cartitem.getItem() == item);
+		return cartItems.stream().anyMatch(cartitem -> Objects.equals(cartitem.getItem().getItemId(), item.getItemId()));
 	}
 
 	public List<CartItem> getCartItems() {

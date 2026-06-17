@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import myjastip.db.DatabaseUtil;
 import myjastip.users.Customer;
@@ -19,6 +20,30 @@ public class AuthView {
     private Scene loginScene;
     private Scene registerScene;
 
+    String inputFieldStyle =
+        "-fx-font-family: 'Inter';" +
+        "-fx-font-size: 15px;" +
+        "-fx-text-fill: #f1f5f0;" +
+        "-fx-prompt-text-fill: #6b8570;" +
+        "-fx-background-color: rgba(255, 255, 255, 0.06);" +
+        "-fx-background-radius: 8;" +
+        "-fx-border-color: rgba(255, 255, 255, 0.12);" +
+        "-fx-border-radius: 8;" +
+        "-fx-padding: 12 16 12 16;";
+
+    String inputFieldFocusStyle =
+        "-fx-font-family: 'Inter';" +
+        "-fx-font-size: 15px;" +
+        "-fx-text-fill: #f1f5f0;" +
+        "-fx-prompt-text-fill: #6b8570;" +
+        "-fx-background-color: rgba(255, 255, 255, 0.1);" +
+        "-fx-background-radius: 8;" +
+        "-fx-border-color: #8aad7a;" +
+        "-fx-border-radius: 8;" +
+        "-fx-padding: 12 16 12 16;" +
+        "-fx-effect: dropshadow(gaussian, rgba(107,158,126,0.15), 6, 0, 0, 0);";
+
+
     public AuthView(MyJastipWindow appWindow) {
         this.appWindow = appWindow;
         createLoginScene();
@@ -26,25 +51,75 @@ public class AuthView {
     }
 
     private void createLoginScene() {
+        StackPane mainLayout = new StackPane();
         VBox layout = new VBox(15);
         layout.setPadding(new Insets(30));
         layout.setAlignment(Pos.CENTER);
+        layout.setMaxSize(400,600);
 
         Label titleLabel = new Label("Login");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 20px; -fx-border-radius: 20px;");
+        titleLabel.setStyle(
+            "-fx-font-family: 'Inter';" +
+            "-fx-font-size: 28px;" +
+            "-fx-font-weight: 800;" +
+            "-fx-text-fill: #8aad7a;"
+        );
+
+        Label subtitleLabel = new Label("Masuk ke akun kamu");
+        subtitleLabel.setStyle(
+            "-fx-font-family: 'Inter';" +
+            "-fx-font-size: 14px;" +
+            "-fx-text-fill: #6b8570;"
+        );
+
 
         TextField usernameInput = new TextField();
         usernameInput.setPromptText("Username");
+        usernameInput.setStyle(inputFieldStyle);
+
+        usernameInput.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                usernameInput.setStyle(inputFieldFocusStyle);
+            } else {
+                usernameInput.setStyle(inputFieldStyle);
+            }
+        });
 
         PasswordField passwordInput = new PasswordField();
         passwordInput.setPromptText("Password");
+        passwordInput.setStyle(inputFieldStyle);
+
+        passwordInput.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                passwordInput.setStyle(inputFieldFocusStyle);
+            } else {
+                passwordInput.setStyle(inputFieldStyle);
+            }
+        });
+
 
         Button loginButton = new Button("Masuk");
         loginButton.setMaxWidth(Double.MAX_VALUE);
-        loginButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 20px; -fx-border-radius: 20px;");
+        loginButton.setStyle(
+            "-fx-font-family: 'Inter';" +
+            "-fx-font-size: 16px;" +
+            "-fx-font-weight: 600;" +
+            "-fx-text-fill: white;" +
+            "-fx-background-color: linear-gradient(to right, #6B9E7E, #2D5F52);" +
+            "-fx-background-radius: 8;" +
+            "-fx-padding: 14 24 14 24;" +
+            "-fx-cursor: hand;" +
+            "-fx-effect: dropshadow(gaussian, rgba(107,158,126,0.35), 14, 0, 0, 4);"
+        );
+
 
         Hyperlink registerLink = new Hyperlink("Belum punya akun? Daftar");
-
+        registerLink.setStyle(
+            "-fx-font-family: 'Inter';" +
+            "-fx-font-size: 14px;" +
+            "-fx-text-fill: #8aad7a;" +
+            "-fx-border-color: transparent;"
+        );
         registerLink.setOnAction(e -> appWindow.showRegisterScene());
 
         loginButton.setOnAction(e -> {
@@ -56,7 +131,12 @@ public class AuthView {
                     String userId = DatabaseUtil.getUserId(name, pass);
                     User user = DatabaseUtil.getUser(userId);
                     if (user != null) {
-                        appWindow.showDashboardScene(user);
+//                        appWindow.showDashboardScene(user);
+                        if (user instanceof Customer) {
+                            appWindow.showCustomerDashboardScene((Customer) user);
+                        } else if (user instanceof Jastiper) {
+                            appWindow.showJastiperDashboardScene((Jastiper) user);
+                        }
                     } else {
                         throw new UserNotFoundException("User atau Password Salah!");
                     }
@@ -69,26 +149,80 @@ public class AuthView {
 
         });
 
-        layout.getChildren().addAll(titleLabel, usernameInput, passwordInput, loginButton, registerLink);
-        loginScene = new Scene(layout, 600, 400);
+        layout.getChildren().addAll(titleLabel, subtitleLabel, usernameInput, passwordInput, loginButton, registerLink);
+
+        layout.setStyle(
+            "-fx-alignment: center;" +
+            "-fx-padding: 48 36 48 36;" +
+            "-fx-background-color: rgba(30, 50, 45, 0.7);" +
+            "-fx-background-radius: 16;" +
+            "-fx-border-color: rgba(255, 255, 255, 0.08);" +
+            "-fx-border-radius: 16;" +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 32, 0, 0, 8);"
+        );
+        mainLayout.setAlignment(Pos.CENTER);
+        mainLayout.setStyle(
+            "-fx-background-color: linear-gradient(to bottom right, #1a2a2e, #263842, #1e3530);"
+        );
+        mainLayout.getChildren().add(layout);
+
+        loginScene = new Scene(mainLayout, 1600, 1000);
     }
 
     private void createRegisterScene() {
+        StackPane mainLayout = new StackPane();
         VBox layout = new VBox(15);
         layout.setPadding(new Insets(30));
         layout.setAlignment(Pos.CENTER);
+        layout.setMaxSize(400,600);
 
         Label titleLabel = new Label("Register");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        titleLabel.setStyle(
+            "-fx-font-family: 'Inter';" +
+            "-fx-font-size: 28px;" +
+            "-fx-font-weight: 800;" +
+            "-fx-text-fill: #8aad7a;"
+        );
+
+        Label subtitleLabel = new Label("Bergabung dengan myJastip sekarang");
+        subtitleLabel.setStyle(
+            "-fx-font-family: 'Inter';" +
+            "-fx-font-size: 14px;" +
+            "-fx-text-fill: #6b8570;"
+        );
 
         TextField usernameInput = new TextField();
         usernameInput.setPromptText("Username");
+        usernameInput.setStyle(inputFieldStyle);
+        usernameInput.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                usernameInput.setStyle(inputFieldFocusStyle);
+            } else {
+                usernameInput.setStyle(inputFieldStyle);
+            }
+        });
 
         TextField emailInput = new TextField();
         emailInput.setPromptText("Email");
+        emailInput.setStyle(inputFieldStyle);
+        emailInput.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                emailInput.setStyle(inputFieldFocusStyle);
+            } else {
+                emailInput.setStyle(inputFieldStyle);
+            }
+        });
 
         PasswordField passwordInput = new PasswordField();
         passwordInput.setPromptText("Password");
+        passwordInput.setStyle(inputFieldStyle);
+        passwordInput.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                passwordInput.setStyle(inputFieldFocusStyle);
+            } else {
+                passwordInput.setStyle(inputFieldStyle);
+            }
+        });
 
         UnaryOperator<TextFormatter.Change> integerFilter = change -> {
             String newText = change.getControlNewText();
@@ -101,10 +235,28 @@ public class AuthView {
         TextField phoneNumberInput = new TextField();
         phoneNumberInput.setPromptText("Nomor Telepon");
         phoneNumberInput.setTextFormatter(new TextFormatter<>(integerFilter));
+        phoneNumberInput.setStyle(inputFieldStyle);
+        phoneNumberInput.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                passwordInput.setStyle(inputFieldFocusStyle);
+            } else {
+                passwordInput.setStyle(inputFieldStyle);
+            }
+        });
 
         ComboBox<String> registerAsInput = new ComboBox<>();
         registerAsInput.getItems().addAll("Customer","Jastiper");
         registerAsInput.setPromptText("Pilih Jenis Akun");
+        registerAsInput.setStyle(
+            "-fx-font-family: 'Inter';" +
+            "-fx-font-size: 15px;" +
+            "-fx-text-fill: #f1f5f0;" +
+            "-fx-background-color: rgba(255, 255, 255, 0.06);" +
+            "-fx-background-radius: 8;" +
+            "-fx-border-color: rgba(255, 255, 255, 0.12);" +
+            "-fx-border-radius: 8;" +
+            "-fx-padding: 10 16 10 16;"
+        );
 
         UnaryOperator<TextFormatter.Change> decimalFilter = change -> {
             String newText = change.getControlNewText();
@@ -148,11 +300,12 @@ public class AuthView {
                     if (registerAsInput.getValue().equals("Jastiper")) {
                         Jastiper jastiper = new Jastiper(uuid.toString(), username, email, password, phoneNumber, Double.parseDouble(balance));
                         DatabaseUtil.insertUser(jastiper);
-                        appWindow.showDashboardScene(jastiper);
+                        appWindow.showJastiperDashboardScene(jastiper);
                     } else {
                         Customer customer = new Customer(uuid.toString(), username, email, password, phoneNumber, Double.parseDouble(balance));
                         DatabaseUtil.insertUser(customer);
-                        appWindow.showDashboardScene(customer);
+//                        appWindow.showDashboardScene(customer);
+                        appWindow.showCustomerDashboardScene(customer);
                     }
 
                 }
@@ -162,10 +315,23 @@ public class AuthView {
         });
 
         layout.getChildren().addAll(titleLabel, usernameInput, emailInput, passwordInput, phoneNumberInput, registerAsInput, balanceInput, registerButton, loginLink);
-        registerScene = new Scene(layout, 600, 400);
+        layout.setStyle(
+            "-fx-alignment: center;" +
+            "-fx-padding: 48 36 48 36;" +
+            "-fx-background-color: rgba(30, 50, 45, 0.7);" +
+            "-fx-background-radius: 16;" +
+            "-fx-border-color: rgba(255, 255, 255, 0.08);" +
+            "-fx-border-radius: 16;" +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 32, 0, 0, 8);"
+        );
+        mainLayout.setAlignment(Pos.CENTER);
+        mainLayout.setStyle(
+                "-fx-background-color: linear-gradient(to bottom right, #1a2a2e, #263842, #1e3530);"
+        );
+        mainLayout.getChildren().add(layout);
+
+        registerScene = new Scene(mainLayout, 1600, 1000);
     }
-
-
 
     public Scene getLoginScene() {
         return loginScene;
