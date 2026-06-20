@@ -1,6 +1,7 @@
 package myjastip.storage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Item {
 	private String itemId;
@@ -8,10 +9,10 @@ public class Item {
 	private String description;
 	private double basePrice;
 	private String storeLocationName;
-	private ArrayList<String> categories;
+	private List<String> categories;
 	private String imageUrl;
 
-	public Item(String itemId, String itemName, String description, double basePrice, String storeLocationName, ArrayList<String> categories, String imageUrl) {
+	public Item(String itemId, String itemName, String description, double basePrice, String storeLocationName, List<String> categories, String imageUrl) {
 		this.itemId = itemId;
 		this.itemName = itemName;
 		this.description = description;
@@ -80,8 +81,17 @@ public class Item {
 		this.storeLocationName = storeLocationName;
 	}
 
-	public ArrayList<String> getCategories() {
+	public List<String> getCategories() {
 		return categories;
+	}
+
+	public String getCategoriesAsString() {
+		List<String> arrCategories = new ArrayList<>();
+		for (String category : categories) {
+			arrCategories.add(String.format("'%s'", category));
+		}
+		String categoryString = String.join(",", arrCategories);
+		return "[" + categoryString + "]";
 	}
 
 	public void setCategories(ArrayList<String> categories) {

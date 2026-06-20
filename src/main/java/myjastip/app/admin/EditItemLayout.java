@@ -1,22 +1,27 @@
 package myjastip.app.admin;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.util.Pair;
 import myjastip.db.DatabaseUtil;
 import myjastip.storage.Item;
-import myjastip.users.Customer;
+import myjastip.users.*;
 
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 public class EditItemLayout {
-
+    private TilePane tilePane;
     private List<Item> items = new ArrayList<>();
 
     public EditItemLayout() {
@@ -45,6 +50,15 @@ public class EditItemLayout {
             "-fx-text-fill: #f1f5f0;" +
             "-fx-wrap-text: true;"
         );
+
+        Label itemDescription = new Label(item.getDescription());
+        itemDescription.setWrapText(true);
+        itemDescription.setStyle(
+            "-fx-font-family: 'Inter';" +
+            "-fx-font-size: 12px;" +
+            "-fx-text-fill: #6b8570;"
+        );
+
         Label itemPrice = new Label("Rp" + item.getBasePrice());
         itemPrice.setWrapText(true);
         itemPrice.setStyle(
@@ -78,13 +92,121 @@ public class EditItemLayout {
         }
 
 
-        Button orderButton = new Button("Edit");
+        Button editButton = new Button("Edit");
 
-        orderButton.setOnAction(e -> {
-            }
-        );
+        editButton.setOnAction(e -> {
+            Dialog<Pair<String, Item>> dialog = new Dialog<>();
+            dialog.setTitle("myJastip Editor");
+            dialog.setHeaderText("Edit Item");
 
-        orderButton.setStyle(
+            Image dialogImage = new Image("https://cdn-app.sealsubscriptions.com/shopify/public/img/promo/no-image-placeholder.png");
+            ImageView dialogImageView = new ImageView(dialogImage);
+            dialogImageView.setFitWidth(50);
+            dialogImageView.setFitHeight(50);
+            dialogImageView.setPreserveRatio(true);
+            dialog.setGraphic(dialogImageView);
+
+            ButtonType editButtonType = new ButtonType("Selesai", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(editButtonType, ButtonType.CANCEL);
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField nameInput = new TextField();
+            nameInput.setPromptText("Nama");
+            nameInput.setText(item.getItemName());
+
+            TextField descriptionInput = new TextField();
+            descriptionInput.setPromptText("Deskripsi");
+            descriptionInput.setText(item.getDescription());
+
+            UnaryOperator<TextFormatter.Change> decimalFilter = change -> {
+                String newText = change.getControlNewText();
+                // Allows empty input, digits, and a optional single decimal dot
+                if (newText.matches("\\d*\\.?\\d*")) {
+                    return change;
+                }
+                return null;
+            };
+            TextField priceInput = new TextField();
+            priceInput.setPromptText("Harga");
+            priceInput.setTextFormatter(new TextFormatter<>(decimalFilter));
+            priceInput.setText(new BigDecimal(String.valueOf(item.getBasePrice())).toPlainString());
+
+
+            TextField storeLocationInput = new TextField();
+            storeLocationInput.setPromptText("Alamat Toko");
+            storeLocationInput.setText(item.getStoreLocationName());
+
+            TextField categoryInput = new TextField();
+            categoryInput.setPromptText("Kategori");
+            categoryInput.setText(item.getCategoriesAsString());
+
+            TextField imageURLInput = new TextField();
+            imageURLInput.setPromptText("URL Gambar");
+            imageURLInput.setText(item.getImageUrl());
+
+
+            grid.add(new Label("Nama:"), 0, 0);
+            grid.add(nameInput, 1, 0);
+            grid.add(new Label("Deskripsi:"), 0, 1);
+            grid.add(descriptionInput, 1, 1);
+            grid.add(new Label("Harga:"), 0, 2);
+            grid.add(priceInput, 1, 2);
+            grid.add(new Label("Alamat:"), 0, 3);
+            grid.add(storeLocationInput, 1, 3);
+            grid.add(new Label("Alamat Toko:"), 0, 4);
+            grid.add(categoryInput, 1, 4);
+            grid.add(new Label("URL Gambar:"), 0, 5);
+            grid.add(imageURLInput, 1, 5);
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == editButtonType) {
+                    DatabaseUtil.changeItem(item.getItemId(), nameInput.getText(), descriptionInput.getText(), Double.parseDouble(priceInput.getText()), storeLocationInput.getText(), categoryInput.getText(), imageURLInput.getText());
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<List<String>>(){}.getType();
+                    List<String> categories = gson.fromJson(categoryInput.getText(), listType);
+                    return new Pair<>(item.getItemId(), new Item(item.getItemId(), nameInput.getText(), descriptionInput.getText(), Double.parseDouble(priceInput.getText()), storeLocationInput.getText(), categories, imageURLInput.getText()));
+                }
+                return null;
+            });
+
+
+            dialog.getDialogPane().setContent(grid);
+
+            Optional<Pair<String, Item>> result = dialog.showAndWait();
+
+            result.ifPresent(pair -> {
+                try {
+                    imageView.setImage(new Image(pair.getValue().getImageUrl()));
+                } catch (IllegalArgumentException ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                } finally {
+                    itemName.setText(pair.getValue().getItemName());
+                    itemPrice.setText("Rp" + pair.getValue().getBasePrice());
+                    itemStoreLocation.setText(pair.getValue().getStoreLocationName());
+                    itemCategories.getChildren().clear();
+                    for (String category : pair.getValue().getCategories()) {
+                        Label catoegyLabel = new Label(category);
+                        catoegyLabel.setStyle(
+                                "-fx-font-family: 'Inter';" +
+                                        "-fx-font-size: 11px;" +
+                                        "-fx-text-fill: #B5C48E;" +
+                                        "-fx-background-color: rgba(107, 158, 126, 0.1);" +
+                                        "-fx-background-radius: 100;" +
+                                        "-fx-padding: 2 8 2 8;"
+                        );
+                        itemCategories.getChildren().add(catoegyLabel);
+                    }
+
+                }
+
+            });
+        });
+
+        editButton.setStyle(
             "-fx-font-family: 'Inter';" +
             "-fx-font-size: 13px;" +
             "-fx-font-weight: 600;" +
@@ -95,16 +217,37 @@ public class EditItemLayout {
             "-fx-cursor: hand;"
         );
 
-        HBox orderButtonBox = new HBox();
-        HBox.setHgrow(orderButton, Priority.ALWAYS);
-        orderButton.setMaxWidth(Double.MAX_VALUE);
+        Button deleteButton = new Button("Hapus");
+
+        deleteButton.setOnAction(e -> {
+            DatabaseUtil.removeItem(item.getItemId());
+            tilePane.getChildren().remove(itemBox);
+        });
+
+        deleteButton.setStyle(
+            "-fx-font-family: 'Inter';" +
+            "-fx-font-size: 13px;" +
+            "-fx-font-weight: 600;" +
+            "-fx-text-fill: white;" +
+            "-fx-background-color: linear-gradient(to right, #ef4444, #e11d48);" +
+            "-fx-background-radius: 8;" +
+            "-fx-padding: 8 16 8 16;" +
+            "-fx-cursor: hand;" +
+            "-fx-effect: dropshadow(gaussian, rgba(239,68,68,0.3), 14, 0, 0, 4);"
+        );
+
+        VBox orderButtonBox = new VBox(12);
+        HBox.setHgrow(editButton, Priority.ALWAYS);
+        editButton.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(deleteButton, Priority.ALWAYS);
+        deleteButton.setMaxWidth(Double.MAX_VALUE);
 
         VBox.setVgrow(orderButtonBox, Priority.ALWAYS);
         orderButtonBox.setMaxHeight(Double.MAX_VALUE);
 
-        orderButtonBox.getChildren().add(orderButton);
+        orderButtonBox.getChildren().addAll(editButton, deleteButton);
 
-        contentBox.getChildren().addAll(sp, itemName, itemPrice, itemStoreLocation, itemCategories);
+        contentBox.getChildren().addAll(sp, itemName, itemPrice, itemDescription, itemStoreLocation, itemCategories);
         HBox.setHgrow(contentBox, Priority.ALWAYS);
         contentBox.setMaxHeight(Double.MAX_VALUE);
         itemBox.getChildren().addAll(contentBox, orderButtonBox);
@@ -122,7 +265,7 @@ public class EditItemLayout {
     }
 
     public TilePane itemGridPane() {
-        TilePane tilePane = new TilePane();
+        tilePane = new TilePane();
 
         tilePane.setHgap(10);
         tilePane.setVgap(10);

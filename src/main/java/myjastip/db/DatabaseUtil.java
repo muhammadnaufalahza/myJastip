@@ -12,6 +12,7 @@ import myjastip.storage.Item;
 import myjastip.users.*;
 import org.postgresql.util.PSQLException;
 
+import javax.crypto.spec.PSource;
 import java.sql.*;
 
 import java.util.ArrayList;
@@ -207,6 +208,37 @@ public class DatabaseUtil {
         } catch (Exception e) {
             System.out.println("Terjadi Error pada insertItems(): " + e.getMessage());
 
+        }
+    }
+
+    public static void changeItem(String itemId, String itemName, String description, double basePrice, String storeLocationName, String categoriesAsString, String imageUrl) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("UPDATE items SET name = '%s', description = '%s', base_price = %f, store_location_name = '%s', categories = ARRAY%s, image_url = '%s' WHERE id = '%s'", itemName, description, basePrice, storeLocationName, categoriesAsString, imageUrl, itemId);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            int rowsInserted = pstmt.executeUpdate();
+
+
+        } catch (PSQLException e) {
+            System.out.println("Error PSQLException pada changeItem(): " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada changeItem(): " + e.getMessage());
+        }
+    }
+
+    public static void removeItem(String itemId) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("DELETE FROM items WHERE id = '%s'", itemId);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            int rowsDeleted = pstmt.executeUpdate();
+
+        } catch (PSQLException e) {
+            System.out.println("Error PSQLException pada removeItem(): " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada removeItem(): " + e.getMessage());
         }
     }
 
@@ -525,6 +557,21 @@ public class DatabaseUtil {
             System.out.println("Terjadi Error pada getPaymentByOrderId(): " + e.getMessage());
         }
         return null;
+    }
+
+    public static void removePayment(String paymentId) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("DELETE FROM payments WHERE id = '%s'", paymentId);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            int rowsDeleted = pstmt.executeUpdate();
+
+        } catch (PSQLException e) {
+            System.out.println("Error PSQLException pada removePayment(): " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada removePayment(): " + e.getMessage());
+        }
     }
 
     public static void insertPaymentArray(List<EscrowPayment> payments) {

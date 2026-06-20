@@ -121,13 +121,13 @@ public class EditUsersLayout {
                 grid.setPadding(new Insets(20, 150, 10, 10));
 
                 TextField usernameInput = new TextField();
-                usernameInput.setPromptText("Username:");
+                usernameInput.setPromptText("Username");
                 usernameInput.setText(user.getName());
                 TextField passwordInput = new TextField();
-                passwordInput.setPromptText("Password:");
+                passwordInput.setPromptText("Password");
                 passwordInput.setText(user.getPassword());
                 TextField emailInput = new TextField();
-                emailInput.setPromptText("Email:");
+                emailInput.setPromptText("Email");
                 emailInput.setText(user.getEmail());
 
                 UnaryOperator<TextFormatter.Change> integerFilter = change -> {
@@ -139,7 +139,7 @@ public class EditUsersLayout {
                 };
 
                 TextField phoneNumberInput = new TextField();
-                phoneNumberInput.setPromptText("Nomor Telepon:");
+                phoneNumberInput.setPromptText("Nomor Telepon");
                 phoneNumberInput.setTextFormatter(new TextFormatter<>(integerFilter));
                 phoneNumberInput.setText(user.getPhoneNumber());
 
@@ -154,7 +154,7 @@ public class EditUsersLayout {
                 };
 
                 TextField balanceInput = new TextField();
-                balanceInput.setPromptText("Saldo:");
+                balanceInput.setPromptText("Saldo");
                 balanceInput.setTextFormatter(new TextFormatter<>(decimalFilter));
                 balanceInput.setText(new BigDecimal(String.valueOf(user.getBalance())).toPlainString());
 

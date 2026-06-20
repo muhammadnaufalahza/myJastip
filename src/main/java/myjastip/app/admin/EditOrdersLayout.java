@@ -49,9 +49,9 @@ public class EditOrdersLayout {
 
             Label locationLabel = new Label(order.getLocation().toString());
             locationLabel.setStyle(
-                    "-fx-font-family: 'Inter';" +
-                            "-fx-font-size: 14px;" +
-                            "-fx-text-fill: #6b8570;"
+                "-fx-font-family: 'Inter';" +
+                "-fx-font-size: 14px;" +
+                "-fx-text-fill: #6b8570;"
             );
 
             VBox statusBox = new VBox(4);
@@ -60,15 +60,15 @@ public class EditOrdersLayout {
             Label statusTitleLabel = new Label("Status");
             statusBox.getChildren().addAll(statusTitleLabel, statusLabel);
             statusTitleLabel.setStyle(
-                    "-fx-text-fill: #6b8570;" +
-                            "-fx-font-size: 12;"
+                "-fx-text-fill: #6b8570;" +
+                "-fx-font-size: 12;"
             );
 
             Label locationTitleLabel = new Label("Tujuan");
             locationBox.getChildren().addAll(locationTitleLabel, locationLabel);
             locationTitleLabel.setStyle(
-                    "-fx-text-fill: #6b8570;" +
-                            "-fx-font-size: 12;"
+                "-fx-text-fill: #6b8570;" +
+                "-fx-font-size: 12;"
             );
 
 
@@ -113,7 +113,9 @@ public class EditOrdersLayout {
             deleteOrderButton.setMinWidth(200);
 
             deleteOrderButton.setOnAction(e -> {
-//                orderBox.getChildren().remove(orderMenu);
+                DatabaseUtil.removeOrder(order.getOrderId());
+                DatabaseUtil.removePayment(DatabaseUtil.getPaymentByOrderId(order.getOrderId()).getPaymentId());
+                orderBox.getChildren().remove(orderMenu);
             });
             deleteOrderButton.setStyle(
                 "-fx-font-family: 'Inter';" +
@@ -126,25 +128,6 @@ public class EditOrdersLayout {
                 "-fx-cursor: hand;" +
                 "-fx-effect: dropshadow(gaussian, rgba(239,68,68,0.3), 14, 0, 0, 4);"
             );
-
-
-            Button editOrderButton = new Button("Selesaikan Pesanan");
-            editOrderButton.setMinWidth(200);
-            editOrderButton.setOnAction(e -> {
-            });
-            editOrderButton.setStyle(
-                "-fx-font-family: 'Inter';" +
-                "-fx-font-size: 13px;" +
-                "-fx-font-weight: 600;" +
-                "-fx-text-fill: white;" +
-                "-fx-background-color: linear-gradient(to right, #22c55e, #10b981);" +
-                "-fx-background-radius: 8;" +
-                "-fx-padding: 8 16 8 16;" +
-                "-fx-cursor: hand;" +
-                "-fx-effect: dropshadow(gaussian, rgba(34,197,94,0.3), 14, 0, 0, 4);"
-            );
-
-            EscrowPayment payment = DatabaseUtil.getPaymentByOrderId(order.getOrderId());
 
             idLabel.setStyle(
                     "-fx-font-family: 'Courier New';" +
@@ -165,7 +148,7 @@ public class EditOrdersLayout {
             HBox.setHgrow(rightControl, Priority.ALWAYS);
             rightControl.setMaxWidth(Double.MAX_VALUE);
 
-            rightControl.getChildren().addAll(deleteOrderButton, editOrderButton);
+            rightControl.getChildren().addAll(deleteOrderButton);
 
             controls.getChildren().addAll(statusLocation, rightControl);
 
@@ -205,8 +188,8 @@ public class EditOrdersLayout {
         orderHistoryScrollPane.setFitToWidth(true);
         orderHistoryScrollPane.setContent(orderMenu());
         orderHistoryScrollPane.setStyle(
-                "-fx-overflow: hidden;" +
-                        "-fx-background: transparent; -fx-background-color: transparent;"
+            "-fx-overflow: hidden;" +
+            "-fx-background: transparent; -fx-background-color: transparent;"
         );
         layout.getChildren().addAll(titleLabel, orderHistoryScrollPane);
         return layout;
