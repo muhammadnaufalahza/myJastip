@@ -1,6 +1,7 @@
 package myjastip.db;
 
 import com.google.gson.Gson;
+import myjastip.app.InvalidAuthException;
 import myjastip.location.Location;
 import myjastip.payment.Order;
 import myjastip.payment.OrderStatus;
@@ -23,7 +24,7 @@ public class DatabaseUtil {
         return DriverManager.getConnection(URL);
     }
 
-    public static void insertUser(User user) {
+    public static void insertUser(User user) throws InvalidAuthException {
         try {
             Connection connection = getConnection();
 
@@ -33,10 +34,9 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error pada PSQLException pada insertUser(): " + e.getMessage());
-            System.exit(0);
+            throw new InvalidAuthException("Gagal autentikasi");
         } catch (Exception e) {
             System.out.println("Terjadi Error pada insertUser(): " + e.getMessage());
-            System.exit(0);
         }
     }
 
@@ -53,10 +53,8 @@ public class DatabaseUtil {
             }
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada getUserId(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada getUserId(): " + e.getMessage());
-            System.exit(0);
         }
         return null;
     }
@@ -89,10 +87,8 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada getUser(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
-            System.out.println("Terjadi Error: " + e.getMessage());
-            System.exit(0);
+            System.out.println("Terjadi Error pada getUser()" + e.getMessage());
         }
         return null;
     }
@@ -108,10 +104,8 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada changeUserBalance(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada changeUserBalance(): " + e.getMessage());
-            System.exit(0);
         }
     }
 
@@ -146,10 +140,8 @@ public class DatabaseUtil {
             }
         } catch (PSQLException e) {
             System.out.println("Error pada PSQLException pada insertItems(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada insertItems(): " + e.getMessage());
-            System.exit(0);
 
         }
     }
@@ -169,10 +161,8 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error pada PSQLException pada insertOrder(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada insertOrder(): " + e.getMessage());
-            System.exit(0);
         }
     }
 
@@ -204,11 +194,8 @@ public class DatabaseUtil {
             }
         } catch (PSQLException e) {
             System.out.println("Error pada PSQLException pada insertItems(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada insertItems(): " + e.getMessage());
-            System.exit(0);
-
         }
     }
 
@@ -240,10 +227,8 @@ public class DatabaseUtil {
             }
         } catch (PSQLException e) {
             System.out.println("Error pada PSQLException pada insertOrdersByReceiverId()\n" + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada insertOrdersByReceiverId()\n" + e.getMessage());
-            System.exit(0);
 
         }
     }
@@ -276,10 +261,8 @@ public class DatabaseUtil {
             }
         } catch (PSQLException e) {
             System.out.println("Error pada PSQLException pada insertOrdersByJastiperId()\n" + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada insertOrdersByJastiperId()\n" + e.getMessage());
-            System.exit(0);
 
         }
     }
@@ -310,10 +293,8 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada getOrderByReceiverId(); " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada getOrderByReceiverId(); " + e.getMessage());
-            System.exit(0);
         }
         return null;
     }
@@ -344,10 +325,8 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada getOrderByJastiperId(); " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada getOrderByJastiperId(); " + e.getMessage());
-            System.exit(0);
         }
         return null;
     }
@@ -377,10 +356,8 @@ public class DatabaseUtil {
             return null;
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada getOrder(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada getOrder(): " + e.getMessage());
-            System.exit(0);
         }
         return null;
     }
@@ -396,10 +373,8 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada changeOrderStatus(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada changeOrderStatus(): " + e.getMessage());
-            System.exit(0);
         }
     }
 
@@ -414,10 +389,8 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada changeOrderStatus(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada changeOrderStatus(): " + e.getMessage());
-            System.exit(0);
         }
     }
 
@@ -431,10 +404,8 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada removeOrder(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada removeOrder(): " + e.getMessage());
-            System.exit(0);
         }
     }
 
@@ -449,10 +420,8 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error pada PSQLException pada insertPayment(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada insertPayment(): " + e.getMessage());
-            System.exit(0);
         }
     }
 
@@ -467,10 +436,8 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada changePaymentStatus(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada changePaymentStatus(): " + e.getMessage());
-            System.exit(0);
         }
     }
 
@@ -490,10 +457,8 @@ public class DatabaseUtil {
 
         } catch (PSQLException e) {
             System.out.println("Error PSQLException pada getPaymentByOrderId(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada getPaymentByOrderId(): " + e.getMessage());
-            System.exit(0);
         }
         return null;
     }
@@ -515,10 +480,8 @@ public class DatabaseUtil {
             }
         } catch (PSQLException e) {
             System.out.println("Error pada PSQLException pada insertPaymentArray(): " + e.getMessage());
-            System.exit(0);
         } catch (Exception e) {
             System.out.println("Terjadi Error pada insertPaymentArray(): " + e.getMessage());
-            System.exit(0);
 
         }
     }

@@ -2,10 +2,12 @@ package myjastip.app;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import myjastip.app.admin.AdminDashboardView;
 import myjastip.app.customer.CustomerDashboardView;
 import myjastip.app.customer.PaymentView;
 import myjastip.app.jastiper.JastiperDashboardView;
 import myjastip.payment.EscrowPayment;
+import myjastip.users.Admin;
 import myjastip.users.Customer;
 import myjastip.users.Jastiper;
 import myjastip.users.User;
@@ -17,6 +19,7 @@ public class MyJastipWindow extends Application {
 //    private DashboardView dashboardView;
     private CustomerDashboardView customerDashboardView;
     private JastiperDashboardView jastiperDashboardView;
+    private AdminDashboardView adminDashboardView;
 //    private StoreView storeView;
 //    private CustomerOrdersView customerOrdersView;
 //    private JastiperOrderView jastiperOrderView;
@@ -33,6 +36,7 @@ public class MyJastipWindow extends Application {
 //        this.dashboardView = new DashboardView(this);
         this.customerDashboardView = new CustomerDashboardView(this);
         this.jastiperDashboardView = new JastiperDashboardView(this);
+        this.adminDashboardView = new AdminDashboardView(this);
 //        this.storeView = new StoreView(this);
 //        this.customerOrdersView = new CustomerOrdersView(this);
 //        this.jastiperOrderView = new JastiperOrderView(this);
@@ -65,6 +69,12 @@ public class MyJastipWindow extends Application {
         jastiperDashboardView.setJastiper(jastiper);
         primaryStage.setScene(jastiperDashboardView.getDashboardScene());
     }
+
+    public void showAdminDashboardScene(Admin admin) {
+        adminDashboardView.setAdmin(admin);
+        primaryStage.setScene(adminDashboardView.getDashboardScene());
+    }
+
 
 
 //    public void showStoreScene(Customer customer) {

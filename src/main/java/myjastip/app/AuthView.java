@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import myjastip.db.DatabaseUtil;
+import myjastip.users.Admin;
 import myjastip.users.Customer;
 import myjastip.users.Jastiper;
 import myjastip.users.User;
@@ -136,6 +137,8 @@ public class AuthView {
                             appWindow.showCustomerDashboardScene((Customer) user);
                         } else if (user instanceof Jastiper) {
                             appWindow.showJastiperDashboardScene((Jastiper) user);
+                        } else if (user instanceof Admin) {
+                            appWindow.showAdminDashboardScene((Admin) user);
                         }
                     } else {
                         throw new UserNotFoundException("User atau Password Salah!");
