@@ -93,6 +93,70 @@ public class DatabaseUtil {
         return null;
     }
 
+    public static void changeUser(String userId, String userName, String userEmail, String userPassword, String userPhoneNumber, double balance) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("UPDATE users SET name = '%s', email = '%s', password = '%s', phone_number = '%s', balance = '%f' WHERE id = '%s'", userName, userEmail, userPassword, userPhoneNumber, balance, userId);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            int rowsInserted = pstmt.executeUpdate();
+
+
+        } catch (PSQLException e) {
+            System.out.println("Error PSQLException pada changeUser(): " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada changeUser(): " + e.getMessage());
+        }
+    }
+
+    public static void removeUser(String userId) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = String.format("DELETE FROM users WHERE id = '%s'", userId);
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            int rowsDeleted = pstmt.executeUpdate();
+
+        } catch (PSQLException e) {
+            System.out.println("Error PSQLException pada removeUser(): " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada removeUser(): " + e.getMessage());
+        }
+    }
+
+    public static void insertUsers(List<User> users) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            String query = "SELECT * FROM \"users\";";
+            var resultSet = statement.executeQuery(query);
+            users.clear();
+            while (resultSet.next()) {
+                String userId = resultSet.getString("id");
+                String userName = resultSet.getString("name");
+                String userEmail = resultSet.getString("email");
+                String userPassword = resultSet.getString("password");
+                String userPhoneNumber = resultSet.getString("phone_number");
+                String accountType = resultSet.getString("account_type");
+                double balance = resultSet.getDouble("balance");
+
+                if (accountType.equals(UserTypes.JASTIPER.toString())) {
+                    users.add(new Jastiper(userId, userName, userEmail, userPassword, userPhoneNumber, balance));
+                } else if (accountType.equals(UserTypes.CUSTOMER.toString())) {
+                    users.add(new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, balance));
+                } else {
+                    users.add(new Admin(userId, userName, userEmail, userPassword, userPhoneNumber, balance));
+                }
+
+            }
+        } catch (PSQLException e) {
+            System.out.println("Error pada PSQLException pada insertUsers(): " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Terjadi Error pada insertUsers(): " + e.getMessage());
+
+        }
+    }
+
     public static void changeUserBalance(String userId, double newBalance) {
         try {
             Connection connection = getConnection();
@@ -113,12 +177,12 @@ public class DatabaseUtil {
 
 
     public static void insertItems(List<Item> items) {
-        items.clear();
         try {
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
             String query = "SELECT * FROM \"items\";";
             var resultSet = statement.executeQuery(query);
+            items.clear();
             while (resultSet.next()) {
                 String itemId = resultSet.getString("id");
                 String itemName = resultSet.getString("name");
@@ -168,12 +232,12 @@ public class DatabaseUtil {
 
 
     public static void insertOrders(List<Order> orders) {
-        orders.clear();
         try {
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
             String query = "SELECT * FROM \"orders\";";
             var resultSet = statement.executeQuery(query);
+            orders.clear();
             while (resultSet.next()) {
                 String orderId = resultSet.getString("id");
                 String orderStatus = resultSet.getString("status");
@@ -193,20 +257,20 @@ public class DatabaseUtil {
 
             }
         } catch (PSQLException e) {
-            System.out.println("Error pada PSQLException pada insertItems(): " + e.getMessage());
+            System.out.println("Error pada PSQLException pada insertOrders(): " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Terjadi Error pada insertItems(): " + e.getMessage());
+            System.out.println("Terjadi Error pada insertOrderes(): " + e.getMessage());
         }
     }
 
     public static void insertOrdersByReceiverId(List<Order> orders, String userId) {
-        orders.clear();
+
         try {
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
             String query = String.format("SELECT * FROM orders WHERE receiver_id = '%s'", userId);
-
             var resultSet = statement.executeQuery(query);
+            orders.clear();
             while (resultSet.next()) {
                 String orderId = resultSet.getString("id");
                 String orderStatus = resultSet.getString("status");

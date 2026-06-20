@@ -7,22 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import myjastip.app.*;
-import myjastip.app.customer.CustomerOrdersLayout;
 import myjastip.app.customer.PaymentHistoryLayout;
-import myjastip.app.customer.StoreLayout;
-import myjastip.db.DatabaseUtil;
-import myjastip.location.InvalidCoordinateException;
-import myjastip.payment.EmptyOrderException;
-import myjastip.payment.EscrowPayment;
-import myjastip.payment.Order;
-import myjastip.storage.CartItem;
 import myjastip.users.Admin;
-import myjastip.users.Customer;
-
-import java.math.BigDecimal;
-import java.util.UUID;
-import java.util.function.UnaryOperator;
-import java.util.regex.Pattern;
 
 public class AdminDashboardView {
 
@@ -30,9 +16,9 @@ public class AdminDashboardView {
     private Scene dashboardScene;
     private Admin admin;
     private BorderPane mainLayout;
-    private StoreLayout storeLayout;
-    private PaymentHistoryLayout paymentHistoryLayout;
-    private CustomerOrdersLayout customerOrdersLayout;
+    private EditItemLayout editItemLayout;
+    private EditUsersLayout editUsersLayout;
+    private EditOrdersLayout editOrdersLayout;
 
 
     String inputFieldStyle =
@@ -174,19 +160,20 @@ public class AdminDashboardView {
             btnDashboard.setStyle(activeNavStyle);
         });
         btnItemEdit.setOnAction(e -> {
-//            storeLayout = new StoreLayout(customer);
-//            showView(storeLayout.createStoreLayout());
+            editItemLayout = new EditItemLayout();
+            showView(editItemLayout.createStoreLayout());
             sidebar.getChildren().forEach(node -> node.setStyle(defaultNavStyle));
             btnItemEdit.setStyle(activeNavStyle);
         });
         btnUserEdit.setOnAction(e -> {
-//            showView(customerOrdersLayout.createCustomerOrdersLayout());
+            editUsersLayout = new EditUsersLayout();
+            showView(editUsersLayout.createEditUserLayout());
             sidebar.getChildren().forEach(node -> node.setStyle(defaultNavStyle));
             btnUserEdit.setStyle(activeNavStyle);
         });
         btnOrderEdit.setOnAction(e -> {
-//            paymentHistoryLayout = new PaymentHistoryLayout(customer);
-//            showView(paymentHistoryLayout.createPaymentHistoryLayout());
+            editOrdersLayout = new EditOrdersLayout();
+            showView(editOrdersLayout.createEditOrdersLayout());
             sidebar.getChildren().forEach(node -> node.setStyle(defaultNavStyle));
             btnOrderEdit.setStyle(activeNavStyle);
         });
