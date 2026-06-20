@@ -67,7 +67,7 @@ public class PaymentHistoryLayout {
                             "-fx-font-family: 'Inter';" +
                                     "-fx-font-size: 12px;" +
                                     "-fx-font-weight: 600;" +
-                                    "-fx-text-fill: #f87171;" +
+                                    "-fx-text-fill: #ffffff;" +
                                     "-fx-background-color: rgba(192, 192, 192, 0.15);" +
                                     "-fx-background-radius: 100;" +
                                     "-fx-padding: 4 12 4 12;"

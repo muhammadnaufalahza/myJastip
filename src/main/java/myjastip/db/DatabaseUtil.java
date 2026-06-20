@@ -8,9 +8,7 @@ import myjastip.payment.EscrowPayment;
 import myjastip.payment.PaymentStatus;
 import myjastip.storage.Cart;
 import myjastip.storage.Item;
-import myjastip.users.Customer;
-import myjastip.users.Jastiper;
-import myjastip.users.User;
+import myjastip.users.*;
 import org.postgresql.util.PSQLException;
 
 import java.sql.*;
@@ -29,7 +27,7 @@ public class DatabaseUtil {
         try {
             Connection connection = getConnection();
 
-            String query = String.format("INSERT INTO users (id, name, email, password, phone_number, is_jastiper, balance) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %f);", user.getUserId(), user.getName(), user.getEmail(), user.getPassword(), user.getPhoneNumber(), user instanceof Jastiper , user.getBalance());
+            String query = String.format("INSERT INTO users (id, name, email, password, phone_number, balance, account_type) VALUES ('%s', '%s', '%s', '%s', '%s', %f, '%s');", user.getUserId(), user.getName(), user.getEmail(), user.getPassword(), user.getPhoneNumber(), user.getBalance(), user.getUserType().toString());
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.executeUpdate();
 
@@ -76,13 +74,15 @@ public class DatabaseUtil {
                 String userEmail = resultSet.getString("email");
                 String userPassword = resultSet.getString("password");
                 String userPhoneNumber = resultSet.getString("phone_number");
-                boolean isJastiper = resultSet.getBoolean("is_jastiper");
+                String accountType = resultSet.getString("account_type");
                 double balance = resultSet.getDouble("balance");
 
-                if (isJastiper) {
+                if (accountType.equals(UserTypes.JASTIPER.toString())) {
                     return new Jastiper(userId, userName, userEmail, userPassword, userPhoneNumber, balance);
-                } else {
+                } else if (accountType.equals(UserTypes.CUSTOMER.toString())) {
                     return new Customer(userId, userName, userEmail, userPassword, userPhoneNumber, balance);
+                } else {
+                    return new Admin(userId, userName, userEmail, userPassword, userPhoneNumber, balance);
                 }
             }
 

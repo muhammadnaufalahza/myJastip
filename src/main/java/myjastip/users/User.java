@@ -45,4 +45,14 @@ public abstract class User {
 	public String getPassword() {
 		return password;
 	}
+
+	public UserTypes getUserType() {
+		if (this instanceof Customer) {
+			return UserTypes.CUSTOMER;
+		} else if (this instanceof Jastiper) {
+			return UserTypes.JASTIPER;
+		} else {
+			return UserTypes.ADMIN;
+		}
+	}
 }
