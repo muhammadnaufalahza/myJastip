@@ -1,4 +1,4 @@
-package myjastip.app;
+package myjastip.app.admin;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -6,7 +6,10 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
+import myjastip.app.*;
+import myjastip.app.customer.CustomerOrdersLayout;
+import myjastip.app.customer.PaymentHistoryLayout;
+import myjastip.app.customer.StoreLayout;
 import myjastip.db.DatabaseUtil;
 import myjastip.location.InvalidCoordinateException;
 import myjastip.payment.EmptyOrderException;
@@ -15,13 +18,12 @@ import myjastip.payment.Order;
 import myjastip.storage.CartItem;
 import myjastip.users.Customer;
 
-import javax.xml.crypto.Data;
 import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
-public class CustomerDashboardView {
+public class AdminDashboardView {
 
     private final MyJastipWindow appWindow;
     private Scene dashboardScene;
@@ -54,7 +56,7 @@ public class CustomerDashboardView {
         "-fx-padding: 12 16 12 16;" +
         "-fx-effect: dropshadow(gaussian, rgba(107,158,126,0.15), 6, 0, 0, 0);";
 
-    public CustomerDashboardView(MyJastipWindow appWindow) {
+    public AdminDashboardView(MyJastipWindow appWindow) {
         this.appWindow = appWindow;
     }
 

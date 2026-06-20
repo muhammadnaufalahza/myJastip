@@ -1,4 +1,4 @@
-package myjastip.app;
+package myjastip.app.jastiper;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

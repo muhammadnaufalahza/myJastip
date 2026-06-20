@@ -1,4 +1,4 @@
-package myjastip.app;
+package myjastip.app.customer;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,12 +8,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import myjastip.app.MyJastipWindow;
 import myjastip.db.DatabaseUtil;
 import myjastip.payment.InsufficientBalanceException;
 import myjastip.payment.EscrowPayment;
 import myjastip.users.Customer;
-import myjastip.users.Jastiper;
-import myjastip.users.User;
 
 public class PaymentView {
     private final MyJastipWindow appWindow;
