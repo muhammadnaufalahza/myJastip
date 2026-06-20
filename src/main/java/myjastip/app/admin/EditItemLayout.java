@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.UnaryOperator;
 
 public class EditItemLayout {
@@ -299,6 +300,100 @@ public class EditItemLayout {
             "-fx-text-fill: #8aad7a;"
         );
 
+        Button addButton = new Button("Tambah Item");
+        addButton.setOnAction(e -> {
+            Dialog<Pair<String, Item>> dialog = new Dialog<>();
+            dialog.setTitle("myJastip Editor");
+            dialog.setHeaderText("Tambah Item");
+
+            Image dialogImage = new Image("https://cdn-app.sealsubscriptions.com/shopify/public/img/promo/no-image-placeholder.png");
+            ImageView dialogImageView = new ImageView(dialogImage);
+            dialogImageView.setFitWidth(50);
+            dialogImageView.setFitHeight(50);
+            dialogImageView.setPreserveRatio(true);
+            dialog.setGraphic(dialogImageView);
+
+            ButtonType editButtonType = new ButtonType("Selesai", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(editButtonType, ButtonType.CANCEL);
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField nameInput = new TextField();
+            nameInput.setPromptText("Nama");
+
+            TextField descriptionInput = new TextField();
+            descriptionInput.setPromptText("Deskripsi");
+
+            UnaryOperator<TextFormatter.Change> decimalFilter = change -> {
+                String newText = change.getControlNewText();
+                // Allows empty input, digits, and a optional single decimal dot
+                if (newText.matches("\\d*\\.?\\d*")) {
+                    return change;
+                }
+                return null;
+            };
+            TextField priceInput = new TextField();
+            priceInput.setPromptText("Harga");
+            priceInput.setTextFormatter(new TextFormatter<>(decimalFilter));
+
+
+            TextField storeLocationInput = new TextField();
+            storeLocationInput.setPromptText("Alamat Toko");
+
+            TextField categoryInput = new TextField();
+            categoryInput.setPromptText("Kategori");
+
+            TextField imageURLInput = new TextField();
+            imageURLInput.setPromptText("URL Gambar");
+
+            grid.add(new Label("Nama:"), 0, 0);
+            grid.add(nameInput, 1, 0);
+            grid.add(new Label("Deskripsi:"), 0, 1);
+            grid.add(descriptionInput, 1, 1);
+            grid.add(new Label("Harga:"), 0, 2);
+            grid.add(priceInput, 1, 2);
+            grid.add(new Label("Alamat:"), 0, 3);
+            grid.add(storeLocationInput, 1, 3);
+            grid.add(new Label("Alamat Toko:"), 0, 4);
+            grid.add(categoryInput, 1, 4);
+            grid.add(new Label("URL Gambar:"), 0, 5);
+            grid.add(imageURLInput, 1, 5);
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == editButtonType) {
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<List<String>>(){}.getType();
+                    List<String> categories = gson.fromJson(categoryInput.getText(), listType);
+                    UUID uuid = UUID.randomUUID();
+                    String itemId = uuid.toString();
+                    return new Pair<>(itemId, new Item(itemId, nameInput.getText(), descriptionInput.getText(), Double.parseDouble(priceInput.getText()), storeLocationInput.getText(), categories, imageURLInput.getText()));
+                }
+                return null;
+            });
+
+
+            dialog.getDialogPane().setContent(grid);
+
+            Optional<Pair<String, Item>> result = dialog.showAndWait();
+
+            result.ifPresent(pair -> {
+                tilePane.getChildren().addAll(itemPane(pair.getValue()));
+            });
+        });
+        addButton.setStyle(
+                "-fx-font-family: 'Inter';" +
+                "-fx-font-size: 13px;" +
+                "-fx-font-weight: 600;" +
+                "-fx-text-fill: white;" +
+                "-fx-background-color: linear-gradient(to right, #6B9E7E, #2D5F52);" +
+                "-fx-background-radius: 8;" +
+                "-fx-padding: 8 16 8 16;" +
+                "-fx-cursor: hand;"
+        );
+
         ScrollPane scrollPane = new ScrollPane();
         TilePane igp = itemGridPane();
         igp.setBackground(Background.EMPTY);
@@ -311,7 +406,7 @@ public class EditItemLayout {
             "-fx-background: transparent; -fx-background-color: transparent;"
         );
 
-        layout.getChildren().addAll(titleLabel, scrollPane);
+        layout.getChildren().addAll(titleLabel, addButton, scrollPane);
 
         return layout;
     }
