@@ -21,7 +21,9 @@ import java.util.function.UnaryOperator;
 
 public class EditUsersLayout {
     List<User> users;
-    public EditUsersLayout() {
+    private Admin admin;
+    public EditUsersLayout(Admin admin) {
+        this.admin = admin;
         this.users = new ArrayList<>();
     }
 

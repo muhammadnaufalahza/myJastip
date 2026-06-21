@@ -178,7 +178,6 @@ public class DatabaseUtil {
     public static void insertItem(Item item) {
         try {
             Connection connection = getConnection();
-
             String query = String.format("INSERT INTO items (id, name, description, base_price, store_location_name, categories, image_url) VALUES ('%s', '%s', '%s', %f, '%s', ARRAY%s, '%s');", item.getItemId(), item.getItemName(), item.getDescription(), item.getBasePrice(), item.getStoreLocationName(), item.getCategoriesAsString(), item.getImageUrl());
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.executeUpdate();

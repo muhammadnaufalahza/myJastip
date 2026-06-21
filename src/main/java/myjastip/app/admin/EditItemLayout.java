@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,8 +25,11 @@ import java.util.function.UnaryOperator;
 public class EditItemLayout {
     private TilePane tilePane;
     private List<Item> items = new ArrayList<>();
+    private final String defaultImageURL = "https://cdn-app.sealsubscriptions.com/shopify/public/img/promo/no-image-placeholder.png";
+    private Admin admin;
 
-    public EditItemLayout() {
+    public EditItemLayout(Admin admin) {
+        this.admin = admin;
         DatabaseUtil.insertItems(items);
     }
 
@@ -34,8 +38,16 @@ public class EditItemLayout {
         VBox contentBox = new VBox(8);
         itemBox.setMaxWidth(225);
 
-        Image image = new Image(item.getImageUrl());
+        Image image;
+
+        try {
+            image = new Image(item.getImageUrl());
+        } catch ( IllegalArgumentException e) {
+            image = new Image(defaultImageURL);
+        }
+
         ImageView imageView = new ImageView(image);
+
 
         imageView.setFitWidth(100);
         imageView.setFitHeight(100);
@@ -100,7 +112,7 @@ public class EditItemLayout {
             dialog.setTitle("myJastip Editor");
             dialog.setHeaderText("Edit Item");
 
-            Image dialogImage = new Image("https://cdn-app.sealsubscriptions.com/shopify/public/img/promo/no-image-placeholder.png");
+            Image dialogImage = new Image(defaultImageURL);
             ImageView dialogImageView = new ImageView(dialogImage);
             dialogImageView.setFitWidth(50);
             dialogImageView.setFitHeight(50);
@@ -158,18 +170,32 @@ public class EditItemLayout {
             grid.add(priceInput, 1, 2);
             grid.add(new Label("Alamat:"), 0, 3);
             grid.add(storeLocationInput, 1, 3);
-            grid.add(new Label("Alamat Toko:"), 0, 4);
+            grid.add(new Label("Kategori:"), 0, 4);
             grid.add(categoryInput, 1, 4);
             grid.add(new Label("URL Gambar:"), 0, 5);
             grid.add(imageURLInput, 1, 5);
 
+            Node editButtonNode = dialog.getDialogPane().lookupButton(editButtonType);
+
+            editButtonNode.disableProperty().bind(
+                nameInput.textProperty().isEmpty()
+                .or(priceInput.textProperty().isEmpty())
+                .or(storeLocationInput.textProperty().isEmpty())
+            );
+
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == editButtonType) {
-                    DatabaseUtil.changeItem(item.getItemId(), nameInput.getText(), descriptionInput.getText(), Double.parseDouble(priceInput.getText()), storeLocationInput.getText(), categoryInput.getText(), imageURLInput.getText());
                     Gson gson = new Gson();
                     Type listType = new TypeToken<List<String>>(){}.getType();
                     List<String> categories = gson.fromJson(categoryInput.getText(), listType);
-                    return new Pair<>(item.getItemId(), new Item(item.getItemId(), nameInput.getText(), descriptionInput.getText(), Double.parseDouble(priceInput.getText()), storeLocationInput.getText(), categories, imageURLInput.getText()));
+
+                    double itemPriceParsed = priceInput.getText().isEmpty() ? 0 : Double.parseDouble(priceInput.getText());
+
+                    if (categories == null) {
+                        categories = new ArrayList<>();
+                    }
+
+                    return new Pair<>(item.getItemId(), new Item(item.getItemId(), nameInput.getText(), descriptionInput.getText(), itemPriceParsed, storeLocationInput.getText(), categories, imageURLInput.getText()));
                 }
                 return null;
             });
@@ -185,6 +211,7 @@ public class EditItemLayout {
                 } catch (IllegalArgumentException ex) {
                     System.out.println("Error: " + ex.getMessage());
                 } finally {
+                    admin.editItem(pair.getValue());
                     itemName.setText(pair.getValue().getItemName());
                     itemPrice.setText("Rp" + pair.getValue().getBasePrice());
                     itemStoreLocation.setText(pair.getValue().getStoreLocationName());
@@ -348,6 +375,8 @@ public class EditItemLayout {
 
             TextField imageURLInput = new TextField();
             imageURLInput.setPromptText("URL Gambar");
+            imageURLInput.setText(defaultImageURL);
+
 
             grid.add(new Label("Nama:"), 0, 0);
             grid.add(nameInput, 1, 0);
@@ -357,22 +386,38 @@ public class EditItemLayout {
             grid.add(priceInput, 1, 2);
             grid.add(new Label("Alamat:"), 0, 3);
             grid.add(storeLocationInput, 1, 3);
-            grid.add(new Label("Alamat Toko:"), 0, 4);
+            grid.add(new Label("Kategori:"), 0, 4);
             grid.add(categoryInput, 1, 4);
             grid.add(new Label("URL Gambar:"), 0, 5);
             grid.add(imageURLInput, 1, 5);
+
+            Node addButtonNode = dialog.getDialogPane().lookupButton(editButtonType);
+
+            addButtonNode.disableProperty().bind(
+                nameInput.textProperty().isEmpty()
+                .or(priceInput.textProperty().isEmpty())
+                .or(storeLocationInput.textProperty().isEmpty())
+            );
 
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == editButtonType) {
                     Gson gson = new Gson();
                     Type listType = new TypeToken<List<String>>(){}.getType();
                     List<String> categories = gson.fromJson(categoryInput.getText(), listType);
+
+                    double itemPrice = priceInput.getText().isEmpty() ? 0 : Double.parseDouble(priceInput.getText());
+
+                    if (categories == null) {
+                        categories = new ArrayList<>();
+                    }
+
                     UUID uuid = UUID.randomUUID();
                     String itemId = uuid.toString();
-                    return new Pair<>(itemId, new Item(itemId, nameInput.getText(), descriptionInput.getText(), Double.parseDouble(priceInput.getText()), storeLocationInput.getText(), categories, imageURLInput.getText()));
+                    return new Pair<>(itemId, new Item(itemId, nameInput.getText(), descriptionInput.getText(), itemPrice, storeLocationInput.getText(), categories, imageURLInput.getText()));
                 }
                 return null;
             });
+
 
 
             dialog.getDialogPane().setContent(grid);
@@ -380,6 +425,7 @@ public class EditItemLayout {
             Optional<Pair<String, Item>> result = dialog.showAndWait();
 
             result.ifPresent(pair -> {
+                admin.addItem(pair.getValue());
                 tilePane.getChildren().addAll(itemPane(pair.getValue()));
             });
         });

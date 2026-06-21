@@ -86,6 +86,7 @@ public class Item {
 	}
 
 	public String getCategoriesAsString() {
+		if (categories.isEmpty()) return "";
 		List<String> arrCategories = new ArrayList<>();
 		for (String category : categories) {
 			arrCategories.add(String.format("'%s'", category));

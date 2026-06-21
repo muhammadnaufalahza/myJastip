@@ -160,19 +160,19 @@ public class AdminDashboardView {
             btnDashboard.setStyle(activeNavStyle);
         });
         btnItemEdit.setOnAction(e -> {
-            editItemLayout = new EditItemLayout();
+            editItemLayout = new EditItemLayout(admin);
             showView(editItemLayout.createStoreLayout());
             sidebar.getChildren().forEach(node -> node.setStyle(defaultNavStyle));
             btnItemEdit.setStyle(activeNavStyle);
         });
         btnUserEdit.setOnAction(e -> {
-            editUsersLayout = new EditUsersLayout();
+            editUsersLayout = new EditUsersLayout(admin);
             showView(editUsersLayout.createEditUserLayout());
             sidebar.getChildren().forEach(node -> node.setStyle(defaultNavStyle));
             btnUserEdit.setStyle(activeNavStyle);
         });
         btnOrderEdit.setOnAction(e -> {
-            editOrdersLayout = new EditOrdersLayout();
+            editOrdersLayout = new EditOrdersLayout(admin);
             showView(editOrdersLayout.createEditOrdersLayout());
             sidebar.getChildren().forEach(node -> node.setStyle(defaultNavStyle));
             btnOrderEdit.setStyle(activeNavStyle);

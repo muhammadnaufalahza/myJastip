@@ -12,14 +12,16 @@ import myjastip.db.DatabaseUtil;
 import myjastip.payment.EscrowPayment;
 import myjastip.payment.Order;
 import myjastip.storage.CartItem;
+import myjastip.users.Admin;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EditOrdersLayout {
     List<Order> orders;
-
-    public EditOrdersLayout() {
+    private Admin admin;
+    public EditOrdersLayout(Admin admin) {
+        this.admin = admin;
         this.orders = new ArrayList<>();
     }
 
