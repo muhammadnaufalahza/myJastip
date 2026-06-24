@@ -5,9 +5,10 @@ import myjastip.payment.Order;
 import myjastip.payment.OrderStatus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Jastiper extends User {
-    private final ArrayList<Order> acceptedOrders;
+    private final List<Order> acceptedOrders;
 
     public Jastiper(String userId, String name, String email, String password, String phoneNumber, double balance) {
         super(userId, name, email, password, phoneNumber, balance);
@@ -38,7 +39,7 @@ public class Jastiper extends User {
         DatabaseUtil.changeOrderStatus(order.getOrderId(), status);
     }
 
-    public ArrayList<Order> getAcceptedOrders() {
+    public List<Order> getAcceptedOrders() {
         DatabaseUtil.insertOrdersByJastiperId(acceptedOrders, userId);
         return acceptedOrders;
     }
